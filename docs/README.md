@@ -21,6 +21,7 @@ Bộ tài liệu này chỉ phục vụ mục tiêu checkpoint 3: biến UI mock
 6. [05-build-plan.md](05-build-plan.md) — kế hoạch code theo thứ tự ưu tiên.
 7. [06-test-and-demo.md](06-test-and-demo.md) — cách chạy eval và kịch bản trình bày CP3.
 8. [07-mock-event-tool.md](07-mock-event-tool.md) — quy ước tool chạy thật trên nguồn dữ liệu mock.
+9. [08-system-workflows.md](08-system-workflows.md) — workflow tổng thể, các nhánh Agent, lỗi và evaluation.
 
 ## Kiến trúc CP3 đề xuất
 
