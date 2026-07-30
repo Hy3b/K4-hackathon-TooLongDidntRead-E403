@@ -2,7 +2,10 @@ from pydantic import BaseModel, Field
 from typing import Optional, List, Dict, Any
 from fastapi import APIRouter
 from fastapi.concurrency import run_in_threadpool
+from fastapi.responses import StreamingResponse
 from datetime import datetime, timedelta, timezone
+import asyncio
+import json
 import logging
 import time
 from uuid import uuid4
@@ -39,6 +42,18 @@ class ChatResponse(BaseModel):
     suggested_actions: List[str] = Field(default_factory=list)
     filters: Dict[str, Any] = Field(default_factory=dict)
     tool_called: bool = False
+
+
+def stream_display_text(response: ChatResponse) -> str:
+    if response.clarifying_question:
+        return response.clarifying_question
+    if response.events:
+        count = len(response.events)
+        return (
+            f"Mình tìm thấy {count} sự kiện phù hợp. "
+            "Bạn có thể xem thời gian, địa điểm và hạn đăng ký trong các thẻ bên dưới."
+        )
+    return response.answer or "Mình chưa có câu trả lời phù hợp."
 
 @router.post("/chat", response_model=ChatResponse)
 async def chat_endpoint(request: ChatRequest):
@@ -140,3 +155,47 @@ async def chat_endpoint(request: ChatRequest):
             filters={},
             tool_called=False,
         )
+
+
+@router.post("/chat/stream")
+async def chat_stream_endpoint(request: ChatRequest):
+    async def generate():
+        yield json.dumps(
+            {"type": "status", "label": "Đang hiểu câu hỏi…"},
+            ensure_ascii=False,
+        ) + "\n"
+
+        response = await chat_endpoint(request)
+
+        if response.tool_called:
+            yield json.dumps(
+                {"type": "status", "label": "Đang tìm sự kiện phù hợp…"},
+                ensure_ascii=False,
+            ) + "\n"
+
+        text = stream_display_text(response)
+        words = text.split(" ")
+        for index, word in enumerate(words):
+            chunk = word if index == 0 else f" {word}"
+            yield json.dumps(
+                {"type": "delta", "text": chunk},
+                ensure_ascii=False,
+            ) + "\n"
+            await asyncio.sleep(0.018)
+
+        yield json.dumps(
+            {
+                "type": "done",
+                "data": response.model_dump(),
+            },
+            ensure_ascii=False,
+        ) + "\n"
+
+    return StreamingResponse(
+        generate(),
+        media_type="application/x-ndjson",
+        headers={
+            "Cache-Control": "no-cache, no-transform",
+            "X-Accel-Buffering": "no",
+        },
+    )

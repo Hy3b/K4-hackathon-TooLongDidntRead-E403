@@ -7,6 +7,7 @@ from eval.run_eval import (
 )
 from app.agent.nodes.understand_query import normalize_filters
 from app.agent.nodes.compose_response import compose_grounded_answer
+from app.api.chat import ChatResponse, stream_display_text
 
 
 def test_filters_match_normalizes_timezone_and_topic_order():
@@ -115,3 +116,24 @@ def test_grounded_answer_contains_only_structured_event_facts():
     assert event["registration_deadline"] in answer
     assert event["location"] in answer
     assert "Mặt Trăng" not in answer
+
+
+def test_stream_display_text_uses_a_short_summary_for_event_cards():
+    response = ChatResponse(
+        conversation_id="conv-1",
+        trace_id="trace-1",
+        answer="**Workshop CV** - một đoạn Markdown dài",
+        intent="search_events",
+        confidence="high",
+        events=[
+            {
+                "id": "evt_mock_001",
+                "title": "Workshop CV",
+            }
+        ],
+    )
+
+    display_text = stream_display_text(response)
+
+    assert display_text.startswith("Mình tìm thấy 1 sự kiện phù hợp")
+    assert "**" not in display_text
