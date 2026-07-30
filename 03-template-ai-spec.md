@@ -9,6 +9,7 @@ Loại: [ ] Tối ưu tính năng có sẵn  [ ] Tính năng mới
 
 ## §1. User & Job
 - Job executor + workflow (đính kèm worksheet JTBD / ảnh sơ đồ):
+```
 ```mermaid
 sequenceDiagram
     participant U as Người dùng
@@ -26,6 +27,7 @@ sequenceDiagram
     API-->>UI: JSON
     UI-->>U: Câu trả lời + event cards
 ```
+
 Toàn bộ chi tiết về bảng khảo sát, phân tích JTBD và dữ liệu người dùng được lưu trữ tại Google Sheets:
 🔗 **[Xem chi tiết Worksheet JTBD & Khảo sát tại đây](https://docs.google.-com/spreadsheets/d/1-dNWqq-InLUeJNqWO8F5MHti5VMNaVLCZl_6uLoDpIk/edit?gid=1972524902#gid=1972524902)**
 
