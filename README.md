@@ -18,6 +18,13 @@
 | `02-guide.md` | Hướng dẫn 5 giai đoạn: khám phá → spec → build → đo & validate → demo |
 | `spec.md` | AI Spec của nhóm (bản hoàn thiện CP4/CP5) |
 | `04-rubric.md` | Rubric 100 điểm (25 nộp checkpoint + 75 chấm bài) + checklist xác minh 6 mốc |
+| `spec.md` | AI Spec hoàn thiện của nhóm |
+| `backend/` | FastAPI, LangGraph Agent, event tool, golden set và các lượt eval |
+| `codebase/` | Frontend prototype |
+| `validation/` | Feedback log cho CP5 |
+| `reflection/` | Template và reflection cá nhân |
+| `docs/09-demo-script-and-dry-run.md` | Kịch bản demo 5 phút và phiếu dry run |
+| `docs/10-technical-verification.md` | Kết quả test và API dry run chuẩn bị CP5 |
 | `data/` | Dữ liệu thật đã ẩn danh: chatlog VLearn tutor + 6 transcript bài giảng + 2 bộ slide bản hackathon — dùng để tìm bằng chứng và xây golden set |
 | `tham-khao/` | JTBD Playbook (PDF) + worksheet JTBD đầy đủ — đọc khi muốn đào sâu |
 
