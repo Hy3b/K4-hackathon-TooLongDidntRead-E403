@@ -9,14 +9,14 @@
 
 1. Đọc **`01-de-bai.md`** để chọn hướng và hiểu tiêu chí.
 2. Mở **`02-guide.md`** — hướng dẫn từng giai đoạn, đứng ở đâu đọc mục đó.
-3. Viết spec theo **`03-template-ai-spec.md`** — deliverable trung tâm của cả sự kiện.
+3. Đọc **`spec.md`** — AI Spec trung tâm của nhóm, đã được điền theo template của sự kiện.
 4. Đọc **`04-rubric.md`** ngay từ đầu — biết trước bài được chấm theo tiêu chí nào.
 
 | File / thư mục | Nội dung |
 |---|---|
 | `01-de-bai.md` | Đề bài 3 hướng · 5 tiêu chí nghiệm thu · ràng buộc chung |
 | `02-guide.md` | Hướng dẫn 5 giai đoạn: khám phá → spec → build → đo & validate → demo |
-| `03-template-ai-spec.md` | Template AI Spec (nộp 23:59 ngày 1) |
+| `spec.md` | AI Spec của nhóm (bản hoàn thiện CP4/CP5) |
 | `04-rubric.md` | Rubric 100 điểm (25 nộp checkpoint + 75 chấm bài) + checklist xác minh 6 mốc |
 | `data/` | Dữ liệu thật đã ẩn danh: chatlog VLearn tutor + 6 transcript bài giảng + 2 bộ slide bản hackathon — dùng để tìm bằng chứng và xây golden set |
 | `tham-khao/` | JTBD Playbook (PDF) + worksheet JTBD đầy đủ — đọc khi muốn đào sâu |
@@ -42,7 +42,7 @@ Một repo nhóm, cấu trúc như sau. Spec chốt lúc 23:59 ngày 1; bản ho
 ```
 repo/
 ├── README.md          ← thành viên (mã HV + tên) + phân công có tên từng phần
-├── spec.md            ← AI Spec theo 03-template-ai-spec.md
+├── spec.md            ← AI Spec trung tâm của nhóm
 ├── demo-slides.pdf    ← slide 6 trang theo 02-guide.md §5.1
 ├── codebase/          ← prototype (ghi rõ phần nào mock)
 ├── eval/              ← golden set + bảng kết quả các lượt chạy
