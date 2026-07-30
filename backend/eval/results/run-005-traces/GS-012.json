@@ -1,0 +1,62 @@
+{
+  "trace_id": "run_2de1c3c75b1142f595ad0c59ad8c430e",
+  "conversation_id": "eval_run-005_GS-012",
+  "input": "Workshop Data Science ngày 4/8 diễn ra lúc nào?",
+  "current_date": "2026-07-30T10:00:00+07:00",
+  "intent": "search_events",
+  "filters": {
+    "date_from": "2026-08-04T00:00:00+07:00",
+    "date_to": "2026-08-04T23:59:59+07:00",
+    "topics": [
+      "technology"
+    ],
+    "event_type": "workshop",
+    "cost": "any",
+    "format": "any",
+    "include_cancelled": true
+  },
+  "tool": "search_events",
+  "tool_result_count": 1,
+  "events": [
+    {
+      "id": "evt_mock_009",
+      "is_mock": true,
+      "title": "Workshop Data Science",
+      "description": "Workshop thực hành Data Science.",
+      "topics": [
+        "technology",
+        "learning"
+      ],
+      "event_type": "workshop",
+      "format": "offline",
+      "cost": "free",
+      "starts_at": "2026-08-04T17:00:00+07:00",
+      "ends_at": "2026-08-04T19:00:00+07:00",
+      "registration_deadline": "2026-08-03T10:00:00+07:00",
+      "location": "Lab 2.1",
+      "organizer": "CLB Data",
+      "status": "needs_confirmation",
+      "source_url": "https://example.invalid/events/evt_mock_009",
+      "updated_at": "2026-07-29T10:00:00+07:00",
+      "conflicts": [
+        {
+          "field": "starts_at",
+          "values": [
+            "2026-08-04T17:00:00+07:00",
+            "2026-08-04T18:00:00+07:00"
+          ]
+        }
+      ]
+    }
+  ],
+  "result_status": "success",
+  "latency_ms": 2101,
+  "model": "ag/gemini-3-flash",
+  "model_provider": "openai",
+  "prompt_version": "cp3-v1",
+  "warnings": [
+    "Sự kiện 'Workshop Data Science' có thông tin chưa được xác nhận chắc chắn."
+  ],
+  "answer": "Các sự kiện phù hợp:\n- Workshop Data Science | 2026-08-04T17:00:00+07:00–2026-08-04T19:00:00+07:00 | Lab 2.1 | hạn đăng ký: 2026-08-03T10:00:00+07:00 | trạng thái: needs_confirmation | https://example.invalid/events/evt_mock_009\nCảnh báo: Sự kiện 'Workshop Data Science' có thông tin chưa được xác nhận chắc chắn.",
+  "timestamp": "2026-07-30T17:14:42.160535+00:00"
+}

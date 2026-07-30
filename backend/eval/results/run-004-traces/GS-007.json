@@ -1,0 +1,27 @@
+{
+  "trace_id": "run_1785431029375",
+  "conversation_id": "eval_run-004_GS-007",
+  "input": "Cuối tuần này ở Lab 5.2 có talkshow nào?",
+  "current_date": "2026-07-30T10:00:00+07:00",
+  "intent": "search_events",
+  "filters": {
+    "date_from": "2026-07-31T00:00:00+07:00",
+    "date_to": "2026-08-02T23:59:59+07:00",
+    "topics": [],
+    "event_type": "talkshow",
+    "cost": "any",
+    "format": "any",
+    "location": "Lab 5.2",
+    "include_cancelled": false
+  },
+  "tool": "search_events",
+  "tool_result_count": 1,
+  "result_status": "success",
+  "latency_ms": 3154,
+  "model": "ag/gemini-3-flash",
+  "model_provider": "openai",
+  "prompt_version": "cp3-v1",
+  "warnings": [],
+  "answer": "Talkshow \"Tech Talk: Từ ý tưởng đến MVP\" tại Lab 5.2 diễn ra từ 15:00 đến 17:00 ngày 02/08/2026. Sự kiện miễn phí do Khoa CNTT tổ chức nhằm chia sẻ kinh nghiệm xây dựng MVP. Hạn đăng ký trước 10:00 ngày 01/08/2026 tại https://example.invalid/events/evt_mock_002.",
+  "timestamp": "2026-07-30T17:03:52.529739+00:00"
+}

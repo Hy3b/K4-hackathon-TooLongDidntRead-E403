@@ -1,0 +1,50 @@
+{
+  "trace_id": "run_6a7483e0afaf4f6c89d9dad68c0a6ca5",
+  "conversation_id": "eval_run-005_GS-007",
+  "input": "Cuối tuần này ở Lab 5.2 có talkshow nào?",
+  "current_date": "2026-07-30T10:00:00+07:00",
+  "intent": "search_events",
+  "filters": {
+    "date_from": "2026-08-01T00:00:00+07:00",
+    "date_to": "2026-08-02T23:59:59+07:00",
+    "topics": [],
+    "event_type": "talkshow",
+    "cost": "any",
+    "format": "any",
+    "location": "Lab 5.2",
+    "include_cancelled": false
+  },
+  "tool": "search_events",
+  "tool_result_count": 1,
+  "events": [
+    {
+      "id": "evt_mock_002",
+      "is_mock": true,
+      "title": "Tech Talk: Từ ý tưởng đến MVP",
+      "description": "Chia sẻ kinh nghiệm xây dựng MVP từ các startup công nghệ.",
+      "topics": [
+        "technology"
+      ],
+      "event_type": "talkshow",
+      "format": "offline",
+      "cost": "free",
+      "starts_at": "2026-08-02T15:00:00+07:00",
+      "ends_at": "2026-08-02T17:00:00+07:00",
+      "registration_deadline": "2026-08-01T10:00:00+07:00",
+      "location": "Lab 5.2",
+      "organizer": "Khoa CNTT",
+      "status": "published",
+      "source_url": "https://example.invalid/events/evt_mock_002",
+      "updated_at": "2026-07-28T10:00:00+07:00",
+      "conflicts": []
+    }
+  ],
+  "result_status": "success",
+  "latency_ms": 3068,
+  "model": "ag/gemini-3-flash",
+  "model_provider": "openai",
+  "prompt_version": "cp3-v1",
+  "warnings": [],
+  "answer": "Các sự kiện phù hợp:\n- Tech Talk: Từ ý tưởng đến MVP | 2026-08-02T15:00:00+07:00–2026-08-02T17:00:00+07:00 | Lab 5.2 | hạn đăng ký: 2026-08-01T10:00:00+07:00 | trạng thái: published | https://example.invalid/events/evt_mock_002",
+  "timestamp": "2026-07-30T17:14:33.572542+00:00"
+}

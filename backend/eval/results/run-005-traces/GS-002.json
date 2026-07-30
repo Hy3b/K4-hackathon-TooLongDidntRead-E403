@@ -1,0 +1,48 @@
+{
+  "trace_id": "run_80ca11064984451fbce810ed9a80122e",
+  "conversation_id": "eval_run-005_GS-002",
+  "input": "Hôm nay có sự kiện gì miễn phí không?",
+  "current_date": "2026-07-30T10:00:00+07:00",
+  "intent": "search_events",
+  "filters": {
+    "date_from": "2026-07-30T00:00:00+07:00",
+    "date_to": "2026-07-30T23:59:59+07:00",
+    "topics": [],
+    "cost": "free",
+    "format": "any",
+    "include_cancelled": false
+  },
+  "tool": "search_events",
+  "tool_result_count": 1,
+  "events": [
+    {
+      "id": "evt_mock_003",
+      "is_mock": true,
+      "title": "Giao lưu sinh viên 5 tốt",
+      "description": "Sự kiện miễn phí giao lưu sinh viên.",
+      "topics": [
+        "community"
+      ],
+      "event_type": "networking",
+      "format": "offline",
+      "cost": "free",
+      "starts_at": "2026-07-30T19:00:00+07:00",
+      "ends_at": "2026-07-30T21:00:00+07:00",
+      "registration_deadline": "2026-07-29T10:00:00+07:00",
+      "location": "Sân trường",
+      "organizer": "Đoàn Thanh niên",
+      "status": "published",
+      "source_url": "https://example.invalid/events/evt_mock_003",
+      "updated_at": "2026-07-27T10:00:00+07:00",
+      "conflicts": []
+    }
+  ],
+  "result_status": "success",
+  "latency_ms": 1310,
+  "model": "ag/gemini-3-flash",
+  "model_provider": "openai",
+  "prompt_version": "cp3-v1",
+  "warnings": [],
+  "answer": "Các sự kiện phù hợp:\n- Giao lưu sinh viên 5 tốt | 2026-07-30T19:00:00+07:00–2026-07-30T21:00:00+07:00 | Sân trường | hạn đăng ký: 2026-07-29T10:00:00+07:00 | trạng thái: published | https://example.invalid/events/evt_mock_003",
+  "timestamp": "2026-07-30T17:14:19.075806+00:00"
+}

@@ -1,0 +1,25 @@
+{
+  "trace_id": "run_1785431009599",
+  "conversation_id": "eval_run-004_GS-002",
+  "input": "Hôm nay có sự kiện gì miễn phí không?",
+  "current_date": "2026-07-30T10:00:00+07:00",
+  "intent": "search_events",
+  "filters": {
+    "date_from": "2026-07-30T00:00:00+07:00",
+    "date_to": "2026-07-30T23:59:59+07:00",
+    "topics": [],
+    "cost": "free",
+    "format": "any",
+    "include_cancelled": false
+  },
+  "tool": "search_events",
+  "tool_result_count": 1,
+  "result_status": "success",
+  "latency_ms": 4246,
+  "model": "ag/gemini-3-flash",
+  "model_provider": "openai",
+  "prompt_version": "cp3-v1",
+  "warnings": [],
+  "answer": "Sự kiện miễn phí: \"Giao lưu sinh viên 5 tốt\".\nĐăng ký trước 10:00 ngày 29/07/2026 để tham gia vì sự kiện diễn ra từ 19:00 đến 21:00 ngày 30/07/2026 tại Sân trường.\nXem chi tiết tại: https://example.invalid/events/evt_mock_003",
+  "timestamp": "2026-07-30T17:03:33.846222+00:00"
+}

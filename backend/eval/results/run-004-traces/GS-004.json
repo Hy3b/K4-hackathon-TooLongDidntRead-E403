@@ -1,0 +1,26 @@
+{
+  "trace_id": "run_1785431017488",
+  "conversation_id": "eval_run-004_GS-004",
+  "input": "Cuối tuần này có sự kiện nào do Phòng CTSV tổ chức không?",
+  "current_date": "2026-07-30T10:00:00+07:00",
+  "intent": "search_events",
+  "filters": {
+    "date_from": "2026-08-01T00:00:00+07:00",
+    "date_to": "2026-08-02T23:59:59+07:00",
+    "topics": [],
+    "cost": "any",
+    "format": "any",
+    "organizer": "Phòng CTSV",
+    "include_cancelled": false
+  },
+  "tool": "search_events",
+  "tool_result_count": 1,
+  "result_status": "success",
+  "latency_ms": 4174,
+  "model": "ag/gemini-3-flash",
+  "model_provider": "openai",
+  "prompt_version": "cp3-v1",
+  "warnings": [],
+  "answer": "Sự kiện do Phòng CTSV tổ chức vào cuối tuần này:\n\nWorkshop CV đầu tiên của bạn\n- Thời gian: 18:00 - 20:00 ngày 01/08/2026.\n- Địa điểm: Hội trường A.\n- Chi phí: Miễn phí.\n- Hạn đăng ký: 10:00 ngày 31/07/2026.\n- Chi tiết tại: https://example.invalid/events/evt_mock_001.",
+  "timestamp": "2026-07-30T17:03:41.662516+00:00"
+}

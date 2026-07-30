@@ -1,0 +1,51 @@
+{
+  "trace_id": "run_776736066c554724b22a4cb08b49cccf",
+  "conversation_id": "eval_run-005_GS-017",
+  "input": "Trong tháng 8 có workshop kỹ năng thuyết trình trả phí nào?",
+  "current_date": "2026-07-30T10:00:00+07:00",
+  "intent": "search_events",
+  "filters": {
+    "date_from": "2026-08-01T00:00:00+07:00",
+    "date_to": "2026-08-31T23:59:59+07:00",
+    "topics": [
+      "skills"
+    ],
+    "event_type": "workshop",
+    "cost": "paid",
+    "format": "any",
+    "include_cancelled": false
+  },
+  "tool": "search_events",
+  "tool_result_count": 1,
+  "events": [
+    {
+      "id": "evt_mock_005",
+      "is_mock": true,
+      "title": "Workshop Kỹ năng thuyết trình",
+      "description": "Kỹ năng thuyết trình chuyên nghiệp.",
+      "topics": [
+        "skills"
+      ],
+      "event_type": "workshop",
+      "format": "offline",
+      "cost": "paid",
+      "starts_at": "2026-08-14T18:00:00+07:00",
+      "ends_at": "2026-08-14T21:00:00+07:00",
+      "registration_deadline": "2026-08-09T10:00:00+07:00",
+      "location": "Phòng 301",
+      "organizer": "Trung tâm kỹ năng mềm",
+      "status": "published",
+      "source_url": "https://example.invalid/events/evt_mock_005",
+      "updated_at": "2026-07-25T10:00:00+07:00",
+      "conflicts": []
+    }
+  ],
+  "result_status": "success",
+  "latency_ms": 1312,
+  "model": "ag/gemini-3-flash",
+  "model_provider": "openai",
+  "prompt_version": "cp3-v1",
+  "warnings": [],
+  "answer": "Các sự kiện phù hợp:\n- Workshop Kỹ năng thuyết trình | 2026-08-14T18:00:00+07:00–2026-08-14T21:00:00+07:00 | Phòng 301 | hạn đăng ký: 2026-08-09T10:00:00+07:00 | trạng thái: published | https://example.invalid/events/evt_mock_005",
+  "timestamp": "2026-07-30T17:14:50.405599+00:00"
+}

@@ -1,0 +1,29 @@
+{
+  "trace_id": "run_1785431041098",
+  "conversation_id": "eval_run-004_GS-011",
+  "input": "Ngày mai có workshop blockchain miễn phí ở Đà Nẵng không?",
+  "current_date": "2026-07-30T10:00:00+07:00",
+  "intent": "search_events",
+  "filters": {
+    "date_from": "2026-07-31T00:00:00+07:00",
+    "date_to": "2026-07-31T23:59:59+07:00",
+    "topics": [
+      "technology"
+    ],
+    "event_type": "workshop",
+    "cost": "free",
+    "format": "any",
+    "location": "Đà Nẵng",
+    "include_cancelled": false
+  },
+  "tool": "search_events",
+  "tool_result_count": 0,
+  "result_status": "success",
+  "latency_ms": 2858,
+  "model": "ag/gemini-3-flash",
+  "model_provider": "openai",
+  "prompt_version": "cp3-v1",
+  "warnings": [],
+  "answer": "Chưa tìm thấy workshop blockchain miễn phí nào tại Đà Nẵng vào ngày mai. Bạn có thể thử nới lỏng điều kiện tìm kiếm bằng cách thay đổi thời gian hoặc khu vực.",
+  "timestamp": "2026-07-30T17:04:03.956513+00:00"
+}

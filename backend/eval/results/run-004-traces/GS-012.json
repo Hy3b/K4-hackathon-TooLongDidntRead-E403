@@ -1,0 +1,28 @@
+{
+  "trace_id": "run_1785431043966",
+  "conversation_id": "eval_run-004_GS-012",
+  "input": "Workshop Data Science ngày 4/8 diễn ra lúc nào?",
+  "current_date": "2026-07-30T10:00:00+07:00",
+  "intent": "search_events",
+  "filters": {
+    "date_from": "2026-08-04T00:00:00+07:00",
+    "date_to": "2026-08-04T23:59:59+07:00",
+    "topics": [],
+    "event_type": "workshop",
+    "cost": "any",
+    "format": "any",
+    "include_cancelled": true
+  },
+  "tool": "search_events",
+  "tool_result_count": 1,
+  "result_status": "success",
+  "latency_ms": 3803,
+  "model": "ag/gemini-3-flash",
+  "model_provider": "openai",
+  "prompt_version": "cp3-v1",
+  "warnings": [
+    "Sự kiện 'Workshop Data Science' có thông tin chưa được xác nhận chắc chắn."
+  ],
+  "answer": "Thời gian bắt đầu của Workshop Data Science vào ngày 04/08/2026 hiện không đồng nhất (17:00 hoặc 18:00) và dự kiến kết thúc lúc 19:00. Hãy kiểm tra lại nguồn chính thức: https://example.invalid/events/evt_mock_009",
+  "timestamp": "2026-07-30T17:04:07.769611+00:00"
+}

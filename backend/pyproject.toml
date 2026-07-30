@@ -1,0 +1,26 @@
+[tool.poetry]
+name = "cp3-backend"
+version = "0.1.0"
+description = "Backend for CP3 Hackathon Event Assistant"
+authors = ["AI Assistant"]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+fastapi = "^0.109.0"
+uvicorn = "^0.27.0"
+pydantic = "^2.5.3"
+pydantic-settings = "^2.1.0"
+langgraph = "^0.0.26"
+langchain = "^0.1.5"
+langchain-openai = "^0.0.5"
+langchain-google-genai = "^0.0.9"
+langchain-anthropic = "^0.1.1"
+python-dotenv = "^1.0.1"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.0.0"
+httpx = "^0.26.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

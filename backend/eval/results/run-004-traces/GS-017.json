@@ -1,0 +1,28 @@
+{
+  "trace_id": "run_1785431057134",
+  "conversation_id": "eval_run-004_GS-017",
+  "input": "Trong tháng 8 có workshop kỹ năng thuyết trình trả phí nào?",
+  "current_date": "2026-07-30T10:00:00+07:00",
+  "intent": "search_events",
+  "filters": {
+    "date_from": "2026-08-01T00:00:00+07:00",
+    "date_to": "2026-08-31T23:59:59+07:00",
+    "topics": [
+      "skills"
+    ],
+    "event_type": "workshop",
+    "cost": "paid",
+    "format": "any",
+    "include_cancelled": false
+  },
+  "tool": "search_events",
+  "tool_result_count": 1,
+  "result_status": "success",
+  "latency_ms": 3267,
+  "model": "ag/gemini-3-flash",
+  "model_provider": "openai",
+  "prompt_version": "cp3-v1",
+  "warnings": [],
+  "answer": "Có 1 workshop kỹ năng thuyết trình trả phí trong tháng 8/2026:\n\n**Workshop Kỹ năng thuyết trình**\n- Thời gian: 18:00 - 21:00, ngày 14/08/2026\n- Địa điểm: Phòng 301\n- Đơn vị tổ chức: Trung tâm kỹ năng mềm\n- Hạn đăng ký: 10:00, ngày 09/08/2026\n- Chi tiết: https://example.invalid/events/evt_mock_005",
+  "timestamp": "2026-07-30T17:04:20.401079+00:00"
+}

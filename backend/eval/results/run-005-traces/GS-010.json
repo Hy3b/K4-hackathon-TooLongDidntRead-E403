@@ -1,0 +1,27 @@
+{
+  "trace_id": "run_749e02dd0eb84424862b1adeb1fe970d",
+  "conversation_id": "eval_run-005_GS-010",
+  "input": "Gần đây có workshop kỹ năng nào không?",
+  "current_date": "2026-07-30T10:00:00+07:00",
+  "intent": "search_events",
+  "filters": {
+    "topics": [
+      "skills"
+    ],
+    "event_type": "workshop",
+    "cost": "any",
+    "format": "any",
+    "include_cancelled": false
+  },
+  "tool": null,
+  "tool_result_count": 0,
+  "events": [],
+  "result_status": "success",
+  "latency_ms": 1726,
+  "model": "ag/gemini-3-flash",
+  "model_provider": "openai",
+  "prompt_version": "cp3-v1",
+  "warnings": [],
+  "answer": "Bạn muốn tìm sự kiện trong hôm nay, cuối tuần này hay khoảng thời gian nào?",
+  "timestamp": "2026-07-30T17:14:38.472925+00:00"
+}

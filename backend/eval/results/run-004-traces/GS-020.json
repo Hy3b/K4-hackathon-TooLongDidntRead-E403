@@ -1,0 +1,29 @@
+{
+  "trace_id": "run_1785431065928",
+  "conversation_id": "eval_run-004_GS-020",
+  "input": "Từ hôm nay đến hết ngày 6/8 có talkshow học tập miễn phí nào ở Hội trường B?",
+  "current_date": "2026-07-30T10:00:00+07:00",
+  "intent": "search_events",
+  "filters": {
+    "date_from": "2026-07-30T00:00:00+07:00",
+    "date_to": "2026-08-06T23:59:59+07:00",
+    "topics": [
+      "learning"
+    ],
+    "event_type": "talkshow",
+    "cost": "free",
+    "format": "any",
+    "location": "Hội trường B",
+    "include_cancelled": false
+  },
+  "tool": "search_events",
+  "tool_result_count": 1,
+  "result_status": "success",
+  "latency_ms": 3481,
+  "model": "ag/gemini-3-flash",
+  "model_provider": "openai",
+  "prompt_version": "cp3-v1",
+  "warnings": [],
+  "answer": "Talkshow \"Hành trang du học\" (chủ đề học tập) miễn phí tại Hội trường B.\nThời gian: 16:00 - 18:00 ngày 03/08/2026.\nHạn đăng ký: Trước 10:00 ngày 02/08/2026.\nChi tiết tại: https://example.invalid/events/evt_mock_008",
+  "timestamp": "2026-07-30T17:04:29.409945+00:00"
+}

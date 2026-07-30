@@ -1,0 +1,26 @@
+{
+  "trace_id": "run_1785431013851",
+  "conversation_id": "eval_run-004_GS-003",
+  "input": "Tuần sau có webinar online nào không?",
+  "current_date": "2026-07-30T10:00:00+07:00",
+  "intent": "search_events",
+  "filters": {
+    "date_from": "2026-08-03T00:00:00+07:00",
+    "date_to": "2026-08-09T23:59:59+07:00",
+    "topics": [],
+    "event_type": "webinar",
+    "cost": "any",
+    "format": "online",
+    "include_cancelled": false
+  },
+  "tool": "search_events",
+  "tool_result_count": 1,
+  "result_status": "success",
+  "latency_ms": 3626,
+  "model": "ag/gemini-3-flash",
+  "model_provider": "openai",
+  "prompt_version": "cp3-v1",
+  "warnings": [],
+  "answer": "Webinar \"Tương lai của AI\" diễn ra trực tuyến qua Google Meet từ 20:00 đến 22:00 ngày 07/08/2026. Hạn đăng ký trước 10:00 ngày 06/08/2026 tại https://example.invalid/events/evt_mock_004.",
+  "timestamp": "2026-07-30T17:03:37.477824+00:00"
+}

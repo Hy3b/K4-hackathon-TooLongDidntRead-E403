@@ -1,0 +1,29 @@
+{
+  "trace_id": "run_1785431025109",
+  "conversation_id": "eval_run-004_GS-006",
+  "input": "Cuối tuần này workshop CV miễn phí của Phòng CTSV tổ chức ở đâu?",
+  "current_date": "2026-07-30T10:00:00+07:00",
+  "intent": "search_events",
+  "filters": {
+    "date_from": "2026-08-01T00:00:00+07:00",
+    "date_to": "2026-08-02T23:59:59+07:00",
+    "topics": [
+      "career"
+    ],
+    "event_type": "workshop",
+    "cost": "free",
+    "format": "any",
+    "organizer": "Phòng CTSV",
+    "include_cancelled": false
+  },
+  "tool": "search_events",
+  "tool_result_count": 1,
+  "result_status": "success",
+  "latency_ms": 4262,
+  "model": "ag/gemini-3-flash",
+  "model_provider": "openai",
+  "prompt_version": "cp3-v1",
+  "warnings": [],
+  "answer": "Workshop \"Workshop CV đầu tiên của bạn\" do Phòng CTSV tổ chức tại Hội trường A.",
+  "timestamp": "2026-07-30T17:03:49.371729+00:00"
+}

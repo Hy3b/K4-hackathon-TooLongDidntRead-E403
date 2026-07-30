@@ -1,0 +1,26 @@
+{
+  "trace_id": "run_1785431047769",
+  "conversation_id": "eval_run-004_GS-013",
+  "input": "Đăng ký workshop CV giúp mình",
+  "current_date": "2026-07-30T10:00:00+07:00",
+  "intent": "register_event",
+  "filters": {
+    "topics": [
+      "career"
+    ],
+    "event_type": "workshop",
+    "cost": "any",
+    "format": "any",
+    "include_cancelled": false
+  },
+  "tool": null,
+  "tool_result_count": 0,
+  "result_status": "success",
+  "latency_ms": 1711,
+  "model": "ag/gemini-3-flash",
+  "model_provider": "openai",
+  "prompt_version": "cp3-v1",
+  "warnings": [],
+  "answer": "Xin lỗi, hiện tại trợ lý chỉ hỗ trợ tìm kiếm sự kiện. Các chức năng khác như đăng ký sự kiện chưa được hỗ trợ.",
+  "timestamp": "2026-07-30T17:04:09.481069+00:00"
+}

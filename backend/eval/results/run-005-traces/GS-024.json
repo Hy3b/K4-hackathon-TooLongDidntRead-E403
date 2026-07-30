@@ -1,0 +1,27 @@
+{
+  "trace_id": "run_74704de937964466844d71e60a59b1cc",
+  "conversation_id": "eval_run-005_GS-024",
+  "input": "Hôm nay có khóa học miễn phí nào không?",
+  "current_date": "2026-07-30T10:00:00+07:00",
+  "intent": "search_events",
+  "filters": {
+    "date_from": "2026-07-30T00:00:00+07:00",
+    "date_to": "2026-07-30T23:59:59+07:00",
+    "topics": [],
+    "event_type": "course",
+    "cost": "free",
+    "format": "any",
+    "include_cancelled": false
+  },
+  "tool": "search_events",
+  "tool_result_count": 0,
+  "events": [],
+  "result_status": "success",
+  "latency_ms": 1350,
+  "model": "ag/gemini-3-flash",
+  "model_provider": "openai",
+  "prompt_version": "cp3-v1",
+  "warnings": [],
+  "answer": "Chưa tìm thấy sự kiện phù hợp. Bạn có thể đổi thời gian, chủ đề hoặc điều kiện tìm kiếm.",
+  "timestamp": "2026-07-30T17:15:03.084453+00:00"
+}

@@ -1,0 +1,29 @@
+{
+  "trace_id": "run_1785431062843",
+  "conversation_id": "eval_run-004_GS-019",
+  "input": "Từ ngày 24/8 đến hết 31/8 có seminar blockchain miễn phí tại Đà Nẵng không?",
+  "current_date": "2026-07-30T10:00:00+07:00",
+  "intent": "search_events",
+  "filters": {
+    "date_from": "2026-08-24T00:00:00+07:00",
+    "date_to": "2026-08-31T23:59:59+07:00",
+    "topics": [
+      "technology"
+    ],
+    "event_type": "seminar",
+    "cost": "free",
+    "format": "any",
+    "location": "Đà Nẵng",
+    "include_cancelled": false
+  },
+  "tool": "search_events",
+  "tool_result_count": 1,
+  "result_status": "success",
+  "latency_ms": 3078,
+  "model": "ag/gemini-3-flash",
+  "model_provider": "openai",
+  "prompt_version": "cp3-v1",
+  "warnings": [],
+  "answer": "Có sự kiện thỏa mãn yêu cầu:\n\nSeminar Blockchain: Cơ hội và Thách thức\n- Thời gian: 18:00 - 21:00, ngày 29/08/2026.\n- Địa điểm: Khách sạn X, Đà Nẵng.\n- Chi phí: Miễn phí.\n- Hạn đăng ký: Trước 10:00 ngày 24/08/2026.\n- Nguồn: https://example.invalid/events/evt_mock_007\n\nĐăng ký tham gia trước hạn chót 24/08/2026.",
+  "timestamp": "2026-07-30T17:04:25.922368+00:00"
+}

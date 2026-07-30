@@ -1,0 +1,24 @@
+{
+  "trace_id": "run_533f10a7c6d04546894945ceeaefb4dd",
+  "conversation_id": "eval_run-005_GS-009",
+  "input": "Có sự kiện nào hay không?",
+  "current_date": "2026-07-30T10:00:00+07:00",
+  "intent": "search_events",
+  "filters": {
+    "topics": [],
+    "cost": "any",
+    "format": "any",
+    "include_cancelled": false
+  },
+  "tool": null,
+  "tool_result_count": 0,
+  "events": [],
+  "result_status": "success",
+  "latency_ms": 1625,
+  "model": "ag/gemini-3-flash",
+  "model_provider": "openai",
+  "prompt_version": "cp3-v1",
+  "warnings": [],
+  "answer": "Bạn muốn tìm sự kiện trong hôm nay, cuối tuần này hay khoảng thời gian nào?",
+  "timestamp": "2026-07-30T17:14:36.737820+00:00"
+}

@@ -1,0 +1,27 @@
+{
+  "trace_id": "run_1785431073138",
+  "conversation_id": "eval_run-004_GS-022",
+  "input": "Ngày 14/8 có workshop trả phí nào ở Phòng 301?",
+  "current_date": "2026-07-30T10:00:00+07:00",
+  "intent": "search_events",
+  "filters": {
+    "date_from": "2026-08-14T00:00:00+07:00",
+    "date_to": "2026-08-14T23:59:59+07:00",
+    "topics": [],
+    "event_type": "workshop",
+    "cost": "paid",
+    "format": "any",
+    "location": "Phòng 301",
+    "include_cancelled": false
+  },
+  "tool": "search_events",
+  "tool_result_count": 1,
+  "result_status": "success",
+  "latency_ms": 3385,
+  "model": "ag/gemini-3-flash",
+  "model_provider": "openai",
+  "prompt_version": "cp3-v1",
+  "warnings": [],
+  "answer": "Sự kiện: Workshop Kỹ năng thuyết trình.\nThời gian: 18:00 - 21:00 ngày 14/08/2026.\nĐịa điểm: Phòng 301.\nChi phí: Trả phí.\nHạn đăng ký: Trước 10:00 ngày 09/08/2026.\nBan tổ chức: Trung tâm kỹ năng mềm.\nChi tiết tại: https://example.invalid/events/evt_mock_005",
+  "timestamp": "2026-07-30T17:04:36.524183+00:00"
+}

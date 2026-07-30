@@ -1,0 +1,49 @@
+{
+  "trace_id": "run_47732036acbc47bda572cd063e08865e",
+  "conversation_id": "eval_run-005_GS-003",
+  "input": "Tuần sau có webinar online nào không?",
+  "current_date": "2026-07-30T10:00:00+07:00",
+  "intent": "search_events",
+  "filters": {
+    "date_from": "2026-08-03T00:00:00+07:00",
+    "date_to": "2026-08-09T23:59:59+07:00",
+    "topics": [],
+    "event_type": "webinar",
+    "cost": "any",
+    "format": "online",
+    "include_cancelled": false
+  },
+  "tool": "search_events",
+  "tool_result_count": 1,
+  "events": [
+    {
+      "id": "evt_mock_004",
+      "is_mock": true,
+      "title": "Webinar: Tương lai của AI",
+      "description": "Sự kiện online miễn phí về AI.",
+      "topics": [
+        "technology"
+      ],
+      "event_type": "webinar",
+      "format": "online",
+      "cost": "free",
+      "starts_at": "2026-08-07T20:00:00+07:00",
+      "ends_at": "2026-08-07T22:00:00+07:00",
+      "registration_deadline": "2026-08-06T10:00:00+07:00",
+      "location": "Google Meet",
+      "organizer": "CLB AI",
+      "status": "published",
+      "source_url": "https://example.invalid/events/evt_mock_004",
+      "updated_at": "2026-07-29T10:00:00+07:00",
+      "conflicts": []
+    }
+  ],
+  "result_status": "success",
+  "latency_ms": 4953,
+  "model": "ag/gemini-3-flash",
+  "model_provider": "openai",
+  "prompt_version": "cp3-v1",
+  "warnings": [],
+  "answer": "Các sự kiện phù hợp:\n- Webinar: Tương lai của AI | 2026-08-07T20:00:00+07:00–2026-08-07T22:00:00+07:00 | Google Meet | hạn đăng ký: 2026-08-06T10:00:00+07:00 | trạng thái: published | https://example.invalid/events/evt_mock_004",
+  "timestamp": "2026-07-30T17:14:24.039098+00:00"
+}

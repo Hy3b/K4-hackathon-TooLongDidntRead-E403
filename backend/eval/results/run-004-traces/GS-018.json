@@ -1,0 +1,29 @@
+{
+  "trace_id": "run_1785431060418",
+  "conversation_id": "eval_run-004_GS-018",
+  "input": "Tháng 8 có cuộc thi công nghệ miễn phí nào ở Nhà thi đấu?",
+  "current_date": "2026-07-30T10:00:00+07:00",
+  "intent": "search_events",
+  "filters": {
+    "date_from": "2026-08-01T00:00:00+07:00",
+    "date_to": "2026-08-31T23:59:59+07:00",
+    "topics": [
+      "technology"
+    ],
+    "event_type": "competition",
+    "cost": "free",
+    "format": "any",
+    "location": "Nhà thi đấu",
+    "include_cancelled": false
+  },
+  "tool": "search_events",
+  "tool_result_count": 1,
+  "result_status": "success",
+  "latency_ms": 2419,
+  "model": "ag/gemini-3-flash",
+  "model_provider": "openai",
+  "prompt_version": "cp3-v1",
+  "warnings": [],
+  "answer": "Tháng 8 có 1 cuộc thi công nghệ miễn phí tại Nhà thi đấu:\n\n**Cuộc thi lập trình Hackathon K4**\n- **Thời gian**: 10:00 ngày 19/08/2026 đến 10:00 ngày 21/08/2026\n- **Hạn đăng ký**: 10:00 ngày 09/08/2026\n- **Địa điểm**: Nhà thi đấu\n- **Chi phí**: Miễn phí\n- **Đơn vị tổ chức**: Khoa CNTT\n- **Chi tiết**: https://example.invalid/events/evt_mock_006",
+  "timestamp": "2026-07-30T17:04:22.838233+00:00"
+}

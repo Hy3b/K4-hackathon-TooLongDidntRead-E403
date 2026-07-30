@@ -1,0 +1,27 @@
+{
+  "trace_id": "run_1785431021670",
+  "conversation_id": "eval_run-004_GS-005",
+  "input": "Hôm nay có hoạt động cộng đồng miễn phí nào?",
+  "current_date": "2026-07-30T10:00:00+07:00",
+  "intent": "search_events",
+  "filters": {
+    "date_from": "2026-07-30T00:00:00+07:00",
+    "date_to": "2026-07-30T23:59:59+07:00",
+    "topics": [
+      "community"
+    ],
+    "cost": "free",
+    "format": "any",
+    "include_cancelled": false
+  },
+  "tool": "search_events",
+  "tool_result_count": 1,
+  "result_status": "success",
+  "latency_ms": 3437,
+  "model": "ag/gemini-3-flash",
+  "model_provider": "openai",
+  "prompt_version": "cp3-v1",
+  "warnings": [],
+  "answer": "Có 1 sự kiện cộng đồng miễn phí:\n\nSự kiện: Giao lưu sinh viên 5 tốt\n- Ban tổ chức: Đoàn Thanh niên\n- Thời gian: 19:00 - 21:00, ngày 30/07/2026\n- Địa điểm: Sân trường\n- Hạn đăng ký: 10:00, ngày 29/07/2026",
+  "timestamp": "2026-07-30T17:03:45.107438+00:00"
+}

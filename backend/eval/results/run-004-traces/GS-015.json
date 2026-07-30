@@ -1,0 +1,28 @@
+{
+  "trace_id": "run_1785431051286",
+  "conversation_id": "eval_run-004_GS-015",
+  "input": "Ngày 4/8 có khóa học kỹ năng lãnh đạo trả phí nào?",
+  "current_date": "2026-07-30T10:00:00+07:00",
+  "intent": "search_events",
+  "filters": {
+    "date_from": "2026-08-04T00:00:00+07:00",
+    "date_to": "2026-08-04T23:59:59+07:00",
+    "topics": [
+      "skills"
+    ],
+    "event_type": "course",
+    "cost": "paid",
+    "format": "any",
+    "include_cancelled": false
+  },
+  "tool": "search_events",
+  "tool_result_count": 1,
+  "result_status": "success",
+  "latency_ms": 2754,
+  "model": "ag/gemini-3-flash",
+  "model_provider": "openai",
+  "prompt_version": "cp3-v1",
+  "warnings": [],
+  "answer": "Khóa học Kỹ năng lãnh đạo (trả phí) diễn ra vào ngày 04/08/2026.\n\nThông tin chi tiết:\n- Thời gian: 18:00 - 21:00 ngày 04/08/2026\n- Địa điểm: Phòng họp 1\n- Ban tổ chức: Đoàn Thanh niên\n- Hạn đăng ký: Trước 10:00 ngày 28/07/2026\n- Đường dẫn: https://example.invalid/events/evt_mock_011",
+  "timestamp": "2026-07-30T17:04:14.040153+00:00"
+}

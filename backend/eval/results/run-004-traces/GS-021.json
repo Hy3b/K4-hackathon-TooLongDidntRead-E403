@@ -1,0 +1,27 @@
+{
+  "trace_id": "run_1785431069414",
+  "conversation_id": "eval_run-004_GS-021",
+  "input": "Ngày 4/8 có khóa học trả phí nào ở Phòng họp 1?",
+  "current_date": "2026-07-30T10:00:00+07:00",
+  "intent": "search_events",
+  "filters": {
+    "date_from": "2026-08-04T00:00:00+07:00",
+    "date_to": "2026-08-04T23:59:59+07:00",
+    "topics": [],
+    "event_type": "course",
+    "cost": "paid",
+    "format": "any",
+    "location": "Phòng họp 1",
+    "include_cancelled": false
+  },
+  "tool": "search_events",
+  "tool_result_count": 1,
+  "result_status": "success",
+  "latency_ms": 3718,
+  "model": "ag/gemini-3-flash",
+  "model_provider": "openai",
+  "prompt_version": "cp3-v1",
+  "warnings": [],
+  "answer": "Khóa học Kỹ năng lãnh đạo (trả phí) do Đoàn Thanh niên tổ chức sẽ diễn ra tại Phòng họp 1 vào ngày 04/08/2026 từ 18:00 đến 21:00. Hạn đăng ký trước 10:00 ngày 28/07/2026. Chi tiết tại: https://example.invalid/events/evt_mock_011",
+  "timestamp": "2026-07-30T17:04:33.132903+00:00"
+}

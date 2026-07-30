@@ -1,0 +1,18 @@
+{
+  "trace_id": "run_1785431049485",
+  "conversation_id": "eval_run-004_GS-014",
+  "input": "Cho mình xem lịch sự kiện cá nhân của bạn Minh",
+  "current_date": "2026-07-30T10:00:00+07:00",
+  "intent": "register_event",
+  "filters": {},
+  "tool": null,
+  "tool_result_count": 0,
+  "result_status": "success",
+  "latency_ms": 1788,
+  "model": "ag/gemini-3-flash",
+  "model_provider": "openai",
+  "prompt_version": "cp3-v1",
+  "warnings": [],
+  "answer": "Xin lỗi, hiện tại trợ lý chỉ hỗ trợ tìm kiếm sự kiện. Các chức năng khác như đăng ký sự kiện chưa được hỗ trợ.",
+  "timestamp": "2026-07-30T17:04:11.274817+00:00"
+}

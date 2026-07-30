@@ -1,0 +1,26 @@
+{
+  "trace_id": "run_1785431032536",
+  "conversation_id": "eval_run-004_GS-008",
+  "input": "Từ hôm nay đến hết ngày 6/8 có talkshow về du học nào?",
+  "current_date": "2026-07-30T10:00:00+07:00",
+  "intent": "search_events",
+  "filters": {
+    "date_from": "2026-07-30T00:00:00+07:00",
+    "date_to": "2026-08-06T23:59:59+07:00",
+    "topics": [],
+    "event_type": "talkshow",
+    "cost": "any",
+    "format": "any",
+    "include_cancelled": false
+  },
+  "tool": "search_events",
+  "tool_result_count": 2,
+  "result_status": "success",
+  "latency_ms": 3874,
+  "model": "ag/gemini-3-flash",
+  "model_provider": "openai",
+  "prompt_version": "cp3-v1",
+  "warnings": [],
+  "answer": "Talkshow Hành trang du học diễn ra từ 16:00 đến 18:00 ngày 03/08/2026 tại Hội trường B. Sự kiện do Phòng Hợp tác Quốc tế tổ chức nhằm chuẩn bị hành trang du học. Hạn đăng ký trước 10:00 ngày 02/08/2026 tại https://example.invalid/events/evt_mock_008.",
+  "timestamp": "2026-07-30T17:03:56.410692+00:00"
+}

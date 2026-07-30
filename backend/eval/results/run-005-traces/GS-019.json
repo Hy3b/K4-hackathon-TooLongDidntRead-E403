@@ -1,0 +1,52 @@
+{
+  "trace_id": "run_840c7f32893642b59609177ea08cede3",
+  "conversation_id": "eval_run-005_GS-019",
+  "input": "Từ ngày 24/8 đến hết 31/8 có seminar blockchain miễn phí tại Đà Nẵng không?",
+  "current_date": "2026-07-30T10:00:00+07:00",
+  "intent": "search_events",
+  "filters": {
+    "date_from": "2026-08-24T00:00:00+07:00",
+    "date_to": "2026-08-31T23:59:59+07:00",
+    "topics": [
+      "technology"
+    ],
+    "event_type": "seminar",
+    "cost": "free",
+    "format": "any",
+    "location": "Đà Nẵng",
+    "include_cancelled": false
+  },
+  "tool": "search_events",
+  "tool_result_count": 1,
+  "events": [
+    {
+      "id": "evt_mock_007",
+      "is_mock": true,
+      "title": "Seminar Blockchain: Cơ hội và Thách thức",
+      "description": "Tìm hiểu về blockchain tại Đà Nẵng.",
+      "topics": [
+        "technology"
+      ],
+      "event_type": "seminar",
+      "format": "offline",
+      "cost": "free",
+      "starts_at": "2026-08-29T18:00:00+07:00",
+      "ends_at": "2026-08-29T21:00:00+07:00",
+      "registration_deadline": "2026-08-24T10:00:00+07:00",
+      "location": "Khách sạn X, Đà Nẵng",
+      "organizer": "Tech Danang",
+      "status": "published",
+      "source_url": "https://example.invalid/events/evt_mock_007",
+      "updated_at": "2026-07-20T10:00:00+07:00",
+      "conflicts": []
+    }
+  ],
+  "result_status": "success",
+  "latency_ms": 1889,
+  "model": "ag/gemini-3-flash",
+  "model_provider": "openai",
+  "prompt_version": "cp3-v1",
+  "warnings": [],
+  "answer": "Các sự kiện phù hợp:\n- Seminar Blockchain: Cơ hội và Thách thức | 2026-08-29T18:00:00+07:00–2026-08-29T21:00:00+07:00 | Khách sạn X, Đà Nẵng | hạn đăng ký: 2026-08-24T10:00:00+07:00 | trạng thái: published | https://example.invalid/events/evt_mock_007",
+  "timestamp": "2026-07-30T17:14:53.381601+00:00"
+}

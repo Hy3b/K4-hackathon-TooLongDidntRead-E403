@@ -1,0 +1,30 @@
+{
+  "trace_id": "run_1785431054055",
+  "conversation_id": "eval_run-004_GS-016",
+  "input": "Ngày 9/8 có Ngày hội việc làm Job Fair 2026 không?",
+  "current_date": "2026-07-30T10:00:00+07:00",
+  "intent": "search_events",
+  "filters": {
+    "date_from": "2026-08-09T00:00:00+07:00",
+    "date_to": "2026-08-09T23:59:59+07:00",
+    "topics": [
+      "career"
+    ],
+    "event_type": "fair",
+    "cost": "any",
+    "format": "any",
+    "include_cancelled": true
+  },
+  "tool": "search_events",
+  "tool_result_count": 1,
+  "result_status": "success",
+  "latency_ms": 3067,
+  "model": "ag/gemini-3-flash",
+  "model_provider": "openai",
+  "prompt_version": "cp3-v1",
+  "warnings": [
+    "Sự kiện 'Ngày hội việc làm Job Fair 2026' đã bị hủy."
+  ],
+  "answer": "Sự kiện \"Ngày hội việc làm Job Fair 2026\" vào ngày 09/08/2026 đã bị hủy (trạng thái: cancelled). \n\nXem chi tiết tại: https://example.invalid/events/evt_mock_010",
+  "timestamp": "2026-07-30T17:04:17.123884+00:00"
+}

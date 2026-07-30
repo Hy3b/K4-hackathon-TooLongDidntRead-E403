@@ -1,0 +1,53 @@
+{
+  "trace_id": "run_4ccc7fb3077046e3bc2d1e03074b7b05",
+  "conversation_id": "eval_run-005_GS-018",
+  "input": "Tháng 8 có cuộc thi công nghệ miễn phí nào ở Nhà thi đấu?",
+  "current_date": "2026-07-30T10:00:00+07:00",
+  "intent": "search_events",
+  "filters": {
+    "date_from": "2026-08-01T00:00:00+07:00",
+    "date_to": "2026-08-31T23:59:59+07:00",
+    "topics": [
+      "technology"
+    ],
+    "event_type": "competition",
+    "cost": "free",
+    "format": "any",
+    "location": "Nhà thi đấu",
+    "include_cancelled": false
+  },
+  "tool": "search_events",
+  "tool_result_count": 1,
+  "events": [
+    {
+      "id": "evt_mock_006",
+      "is_mock": true,
+      "title": "Cuộc thi lập trình Hackathon K4",
+      "description": "Cuộc thi lập trình lớn nhất trường.",
+      "topics": [
+        "technology",
+        "learning"
+      ],
+      "event_type": "competition",
+      "format": "offline",
+      "cost": "free",
+      "starts_at": "2026-08-19T10:00:00+07:00",
+      "ends_at": "2026-08-21T10:00:00+07:00",
+      "registration_deadline": "2026-08-09T10:00:00+07:00",
+      "location": "Nhà thi đấu",
+      "organizer": "Khoa CNTT",
+      "status": "published",
+      "source_url": "https://example.invalid/events/evt_mock_006",
+      "updated_at": "2026-07-25T10:00:00+07:00",
+      "conflicts": []
+    }
+  ],
+  "result_status": "success",
+  "latency_ms": 1069,
+  "model": "ag/gemini-3-flash",
+  "model_provider": "openai",
+  "prompt_version": "cp3-v1",
+  "warnings": [],
+  "answer": "Các sự kiện phù hợp:\n- Cuộc thi lập trình Hackathon K4 | 2026-08-19T10:00:00+07:00–2026-08-21T10:00:00+07:00 | Nhà thi đấu | hạn đăng ký: 2026-08-09T10:00:00+07:00 | trạng thái: published | https://example.invalid/events/evt_mock_006",
+  "timestamp": "2026-07-30T17:14:51.484491+00:00"
+}
