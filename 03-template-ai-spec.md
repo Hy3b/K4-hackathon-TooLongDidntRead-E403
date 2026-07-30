@@ -9,6 +9,9 @@ Loại: [ ] Tối ưu tính năng có sẵn  [ ] Tính năng mới
 
 ## §1. User & Job
 - Job executor + workflow (đính kèm worksheet JTBD / ảnh sơ đồ):
+Toàn bộ chi tiết về bảng khảo sát, phân tích JTBD và dữ liệu người dùng được lưu trữ tại Google Sheets:
+- 🔗 **[Xem chi tiết Worksheet JTBD & Khảo sát tại đây](https://docs.google.-com/spreadsheets/d/1-dNWqq-InLUeJNqWO8F5MHti5VMNaVLCZl_6uLoDpIk/edit?gid=1972524902#gid=1972524902)**
+
 - Core JTBD (không tên sản phẩm/AI trong câu): **Theo dõi và ghi nhớ đúng hạn những sự kiện phù hợp với bản thân khi thông tin nằm rải rác trên nhiều kênh, để kịp đăng ký và tham dự các cơ hội mình quan tâm.**
 - Problem statement (KHÔNG chữ AI): **Sinh viên muốn tham gia các sự kiện phù hợp nhưng phải tự theo dõi thông tin phân tán trên nhiều kênh và tự ghi nhớ thời gian, deadline; vì vậy họ thường biết muộn, quên đăng ký hoặc bỏ lỡ sự kiện mong muốn.**
 - Evidence (chuẩn A và/hoặc B — log đầy đủ trong repo):
