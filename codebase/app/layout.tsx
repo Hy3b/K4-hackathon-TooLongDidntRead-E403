@@ -13,15 +13,15 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "VLearn Event AI — Trợ lý sự kiện",
+  title: "Event AI — Trợ lý sự kiện",
   description:
-    "Prototype CP3 dùng AI để hiểu câu hỏi, tìm kiếm và giải thích sự kiện VLearn từ dữ liệu minh hoạ.",
+    "Prototype CP3 dùng AI để hiểu câu hỏi, tìm kiếm và giải thích sự kiện từ dữ liệu minh hoạ.",
   icons: {
     icon: "/favicon.svg",
     shortcut: "/favicon.svg",
   },
   openGraph: {
-    title: "VLearn Event AI — Trợ lý sự kiện",
+    title: "Event AI — Trợ lý sự kiện",
     description: "Hỏi sự kiện, theo dõi deadline và nhận nhắc lịch chủ động.",
     images: [{ url: "/og.png", width: 1680, height: 945 }],
   },

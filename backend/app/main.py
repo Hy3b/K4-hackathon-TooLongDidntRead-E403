@@ -5,6 +5,7 @@ from app.api.chat import router as chat_router
 from app.config import get_settings
 from app.events.repository import SqliteEventRepository
 from app.api.notifications import router as notifications_router, reminders_router
+from app.api.history import router as history_router
 from app.events.scheduler import check_reminders_task
 from app.database import init_db, get_db
 import asyncio
@@ -34,6 +35,7 @@ app.add_middleware(
 app.include_router(chat_router, prefix="/api")
 app.include_router(notifications_router, prefix="/api")
 app.include_router(reminders_router, prefix="/api")
+app.include_router(history_router, prefix="/api")
 
 @app.get("/health")
 async def health_check():

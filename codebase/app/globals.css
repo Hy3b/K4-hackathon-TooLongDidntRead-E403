@@ -31,8 +31,69 @@ button {
   cursor: pointer;
 }
 button:disabled {
-  cursor: default;
-  opacity: 0.35;
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+/* Stream statuses block */
+.stream-statuses-block {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  background-color: #f7f7f8;
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 12px;
+  border: 1px solid #ececf1;
+  font-size: 13px;
+  color: #6e6e80;
+  width: fit-content;
+}
+
+.stream-statuses-block.completed {
+  opacity: 0.7;
+  max-height: 40px;
+  overflow: hidden;
+  position: relative;
+  transition: max-height 0.3s ease;
+  cursor: pointer;
+}
+
+.stream-statuses-block.completed:hover {
+  max-height: 200px;
+  opacity: 1;
+}
+
+.stream-status-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.status-icon {
+  width: 14px;
+  height: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.status-icon.checkmark {
+  color: #10a37f;
+  font-weight: bold;
+}
+
+.status-icon.spinner {
+  border: 2px solid rgba(0, 0, 0, 0.1);
+  border-left-color: #6e6e80;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .app-shell {

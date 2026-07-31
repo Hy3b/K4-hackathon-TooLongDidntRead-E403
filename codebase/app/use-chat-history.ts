@@ -23,6 +23,8 @@ export type ChatMessage = {
   events: ChatEvent[];
   warnings: string[];
   error?: boolean;
+  errorCode?: string;
+  statuses?: string[];
 };
 
 export type ChatConversation = {
@@ -38,7 +40,61 @@ type ChatApiResponse = {
   clarifyingQuestion: string;
   events: ChatEvent[];
   warnings: string[];
+  errorCode?: string;
 };
+
+type ChatHistoryTurn = {
+  role: "user" | "assistant";
+  content: string;
+};
+
+const MAX_HISTORY_TURNS = 8;
+const MAX_HISTORY_CHARS = 8000;
+
+/**
+ * Return only completed user/assistant turns, bounded for the chat API.
+ *
+ * Messages are stored as individual entries so an in-flight assistant entry
+ * can exist locally. That placeholder (and any unmatched user message) must
+ * never be sent as conversation history. We walk oldest-to-newest to pair
+ * messages, then keep the newest complete turns that fit the finite budget.
+ */
+export function buildCompletedHistory(
+  messages: ChatMessage[],
+  maxTurns = MAX_HISTORY_TURNS,
+  maxChars = MAX_HISTORY_CHARS,
+): ChatHistoryTurn[] {
+  const completed: ChatHistoryTurn[][] = [];
+  let pendingUser: string | null = null;
+
+  for (const message of messages) {
+    const content = message.content.trim();
+    if (message.role === "user") {
+      // A new user message supersedes an unmatched prior one.
+      pendingUser = content || null;
+      continue;
+    }
+    if (pendingUser && content) {
+      completed.push([
+        { role: "user", content: pendingUser },
+        { role: "assistant", content },
+      ]);
+      pendingUser = null;
+    }
+  }
+
+  const selected: ChatHistoryTurn[][] = [];
+  let chars = 0;
+  for (let index = completed.length - 1; index >= 0; index -= 1) {
+    if (selected.length >= maxTurns) break;
+    const turn = completed[index];
+    const turnChars = turn.reduce((sum, message) => sum + message.content.length, 0);
+    if (chars + turnChars > maxChars) continue;
+    selected.unshift(turn);
+    chars += turnChars;
+  }
+  return selected.flat();
+}
 
 const STORAGE_KEY = "vlearn-event-ai:conversations:v2";
 const OWNER_KEY = "vlearn-event-ai:owner:v1";
@@ -86,6 +142,7 @@ function parseChatResponse(value: unknown): ChatApiResponse {
     clarifyingQuestion: cleanMarkdown(response.clarifying_question ?? ""),
     events,
     warnings,
+    errorCode: typeof response.error_code === "string" ? response.error_code : undefined,
   };
 }
 
@@ -160,7 +217,8 @@ export function useChatHistory() {
       setHistoryReady(true);
     }, 0);
 
-    fetch("/api/history", {
+    const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8000";
+    fetch(`${baseUrl}/api/history`, {
       headers: { "x-chat-owner": ownerId.current },
     })
       .then(async (response) => {
@@ -225,7 +283,8 @@ export function useChatHistory() {
       const cached = readCachedConversations();
       const conversation = cached.find((item) => item.id === conversationId);
       if (!conversation || !ownerId.current) return;
-      fetch("/api/history", {
+      const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8000";
+      fetch(`${baseUrl}/api/history`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -263,7 +322,8 @@ export function useChatHistory() {
       return safeNext;
     });
     if (ownerId.current) {
-      fetch(`/api/history?id=${encodeURIComponent(conversationId)}`, {
+      const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8000";
+      fetch(`${baseUrl}/api/history?id=${encodeURIComponent(conversationId)}`, {
         method: "DELETE",
         headers: { "x-chat-owner": ownerId.current },
       }).catch(() => {});
@@ -284,6 +344,7 @@ export function useChatHistory() {
       createdAt: now,
       events: [],
       warnings: [],
+      statuses: [],
     };
     const assistantId = crypto.randomUUID();
     const assistantMessage: ChatMessage = {
@@ -293,6 +354,7 @@ export function useChatHistory() {
       createdAt: now + 1,
       events: [],
       warnings: [],
+      statuses: [],
     };
 
     updateConversation(conversationId, (conversation) => ({
@@ -308,13 +370,16 @@ export function useChatHistory() {
     setStreamStatus("Đang kết nối với trợ lý…");
 
     try {
-      const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "";
+      const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8000";
       const response = await fetch(`${baseUrl}/api/chat/stream`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           conversation_id: conversationId,
           message: trimmed,
+          // The current prompt is sent separately. Only completed turns from
+          // prior messages are included; assistant placeholders are omitted.
+          history: buildCompletedHistory(activeConversation.messages),
         }),
       });
       if (!response.ok || !response.body) {
@@ -344,7 +409,16 @@ export function useChatHistory() {
           if (requestId !== latestRequest.current) return;
 
           if (event.type === "status") {
-            setStreamStatus(event.label ?? "Đang xử lý…");
+            const statusLabel = event.label ?? "Đang xử lý…";
+            setStreamStatus(statusLabel);
+            updateConversation(conversationId, (conversation) => ({
+              ...conversation,
+              messages: conversation.messages.map((message) =>
+                message.id === assistantId 
+                  ? { ...message, statuses: [...(message.statuses || []), statusLabel] }
+                  : message,
+              ),
+            }));
           }
           if (event.type === "delta" && event.text) {
             streamedText += event.text;
@@ -374,6 +448,8 @@ export function useChatHistory() {
                       content: cleanMarkdown(finalContent),
                       events: data.events,
                       warnings: data.warnings,
+                      error: Boolean(data.errorCode),
+                      errorCode: data.errorCode,
                     }
                   : message,
               ),

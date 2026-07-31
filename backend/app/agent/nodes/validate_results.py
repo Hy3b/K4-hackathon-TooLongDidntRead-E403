@@ -16,7 +16,9 @@ def validate_results_node(state: AgentState):
                     "event_id": event["id"],
                     "conflicts": event_conflicts
                 })
-                warnings.append(f"Sự kiện '{event.get('title')}' có thông tin chưa được xác nhận chắc chắn.")
+                warnings.append(
+                    f"Thông tin của sự kiện '{event.get('title', 'không rõ tên')}' có mâu thuẫn; hãy kiểm tra nguồn chính thức."
+                )
                 
     state["conflicts"] = conflicts
     state["warnings"] = warnings

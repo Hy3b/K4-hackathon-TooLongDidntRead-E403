@@ -57,16 +57,9 @@ class SqliteEventRepository:
             query += " AND LOWER(location) LIKE ?"
             params.append(f"%{filters['location'].lower()}%")
             
-        # Time filters: we can use simple string comparison for ISO8601
-        if filters.get("date_from"):
-            query += " AND starts_at >= ?"
-            params.append(filters["date_from"])
-            
-        if filters.get("date_to"):
-            query += " AND starts_at <= ?"
-            params.append(filters["date_to"])
-
         results = []
+        from_dt = self._parse_datetime(filters["date_from"]) if filters.get("date_from") else None
+        to_dt = self._parse_datetime(filters["date_to"]) if filters.get("date_to") else None
         with get_db() as conn:
             cursor = conn.cursor()
             cursor.execute(query, params)
@@ -74,6 +67,13 @@ class SqliteEventRepository:
             
             for row in rows:
                 event = self._row_to_dict(row)
+
+                # Compare instants, not ISO strings (offsets can represent the same moment).
+                event_dt = self._parse_datetime(event["starts_at"])
+                if from_dt and event_dt < from_dt:
+                    continue
+                if to_dt and event_dt > to_dt:
+                    continue
                 
                 # Check topics (since they are stored as JSON strings, we need to filter them in Python or use SQLite JSON1)
                 # Filtering in Python is easier and completely fine for this scale

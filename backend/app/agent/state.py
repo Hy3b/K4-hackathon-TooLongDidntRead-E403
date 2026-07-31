@@ -12,6 +12,9 @@ class AgentState(TypedDict):
     conflicts: List[Dict[str, Any]]
     confidence: str
     answer: Optional[str]
+    direct_answer: Optional[str]
+    error_code: Optional[str]
     suggested_actions: List[str]
     trace_id: str
     warnings: List[str]
+    history: List[Dict[str, str]]

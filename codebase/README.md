@@ -16,6 +16,10 @@ npm run dev
 npm run build
 ```
 
+The UI calls the FastAPI backend through `NEXT_PUBLIC_API_BASE_URL`. Set it
+to the deployed backend origin in production; local development defaults to
+`http://localhost:8000`.
+
 This starter does not use `wrangler.jsonc`.
 
 ## Included Shape

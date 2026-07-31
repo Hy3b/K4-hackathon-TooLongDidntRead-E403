@@ -13,11 +13,11 @@ def compose_grounded_answer(
     lines = ["Các sự kiện phù hợp:"]
     for event in events[:3]:
         lines.append(
-            "- {title} | {starts_at}–{ends_at} | {location} | "
+                "- {title} | {starts_at}–{ends_at} | {location} | "
             "hạn đăng ký: {registration_deadline} | trạng thái: {status} | {source_url}".format(
-                title=event["title"],
-                starts_at=event["starts_at"],
-                ends_at=event["ends_at"],
+                title=event.get("title") or "Không rõ tên",
+                starts_at=event.get("starts_at") or "Chưa rõ thời gian",
+                ends_at=event.get("ends_at") or "Chưa rõ thời gian",
                 location=event.get("location") or "Chưa rõ địa điểm",
                 registration_deadline=event.get("registration_deadline") or "Chưa rõ",
                 status=event["status"],

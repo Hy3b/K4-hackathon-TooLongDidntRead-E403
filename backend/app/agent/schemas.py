@@ -16,9 +16,10 @@ class EventFilter(BaseModel):
     )
 
 class UnderstandQueryResult(BaseModel):
-    intent: str = Field(description="'search_events', 'register_event', or 'unknown'")
+    intent: str = Field(description="'search_events', 'direct_answer', or 'unknown'")
     filters: Optional[EventFilter] = Field(None, description="Extracted filters for searching events. Leave empty if intent is not search_events")
     missing_fields: List[str] = Field(default_factory=list, description="Required fields that are missing, e.g., ['date']")
+    direct_answer: Optional[str] = Field(None, description="If the user is just chatting, greeting, or asking about your capabilities, or asking something out of scope, write your natural response here.")
     confidence: str = Field(description="'high', 'medium', or 'low'")
     
 class AgentResponse(BaseModel):

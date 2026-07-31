@@ -1,5 +1,5 @@
 from pydantic import BaseModel, Field
-from typing import Optional, List, Dict, Any
+from typing import Literal, Optional, List, Dict, Any
 from fastapi import APIRouter
 from fastapi.concurrency import run_in_threadpool
 from fastapi.responses import StreamingResponse
@@ -25,10 +25,16 @@ def save_trace_best_effort(trace_data: dict[str, Any]) -> None:
     except OSError:
         logger.exception("Failed to persist request trace")
 
+class HistoryMessage(BaseModel):
+    role: Literal["user", "assistant"]
+    content: str = Field(min_length=1, max_length=4000)
+
+
 class ChatRequest(BaseModel):
     conversation_id: str = Field(min_length=1, max_length=100)
     message: str = Field(min_length=1, max_length=2000)
     current_date: Optional[datetime] = None
+    history: List[HistoryMessage] = Field(default_factory=list, max_length=16)
 
 class ChatResponse(BaseModel):
     conversation_id: str
@@ -42,6 +48,7 @@ class ChatResponse(BaseModel):
     suggested_actions: List[str] = Field(default_factory=list)
     filters: Dict[str, Any] = Field(default_factory=dict)
     tool_called: bool = False
+    error_code: Optional[str] = None
 
 
 def stream_display_text(response: ChatResponse) -> str:
@@ -75,12 +82,18 @@ async def chat_endpoint(request: ChatRequest):
         "warnings": [],
         "missing_fields": [],
         "search_results": [],
-        "suggested_actions": []
+        "suggested_actions": [],
+        "direct_answer": None,
+        "error_code": None,
+        "history": [message.model_dump() for message in request.history]
     }
     
     try:
         # Run agent
-        final_state = await run_in_threadpool(agent_app.invoke, initial_state)
+        final_state = await asyncio.wait_for(
+            run_in_threadpool(agent_app.invoke, initial_state),
+            timeout=settings.request_timeout_seconds,
+        )
         
         # Prepare response
         answer = final_state.get("answer")
@@ -91,6 +104,7 @@ async def chat_endpoint(request: ChatRequest):
         suggested_actions = final_state.get("suggested_actions", [])
         missing = final_state.get("missing_fields", [])
         filters = final_state.get("filters", {})
+        error_code = final_state.get("error_code")
         tool_called = intent == "search_events" and not missing
         
         clarifying_question = None
@@ -110,7 +124,8 @@ async def chat_endpoint(request: ChatRequest):
             "tool": "search_events" if tool_called else None,
             "tool_result_count": len(events) if events else 0,
             "events": events[:3],
-            "result_status": "success",
+            "result_status": "error" if error_code else ("no_result" if intent == "search_events" and not events else "success"),
+            "error_code": error_code,
             "latency_ms": latency_ms,
             "model": settings.model_name,
             "model_provider": settings.model_provider,
@@ -132,16 +147,19 @@ async def chat_endpoint(request: ChatRequest):
             suggested_actions=suggested_actions,
             filters=filters,
             tool_called=tool_called,
+            error_code=error_code,
         )
         
     except Exception as e:
         # Save error trace
         latency_ms = int((time.time() - start_time) * 1000)
+        error_code = "CHAT_TIMEOUT" if isinstance(e, asyncio.TimeoutError) else "CHAT_ENDPOINT_FAILED"
         await run_in_threadpool(save_trace_best_effort, {
             "trace_id": trace_id,
             "conversation_id": request.conversation_id,
             "input": request.message,
             "error": str(e),
+            "error_code": error_code,
             "latency_ms": latency_ms
         })
         
@@ -154,6 +172,7 @@ async def chat_endpoint(request: ChatRequest):
             confidence="low",
             filters={},
             tool_called=False,
+            error_code=error_code,
         )
 
 
@@ -181,7 +200,6 @@ async def chat_stream_endpoint(request: ChatRequest):
                 {"type": "delta", "text": chunk},
                 ensure_ascii=False,
             ) + "\n"
-            await asyncio.sleep(0.018)
 
         yield json.dumps(
             {

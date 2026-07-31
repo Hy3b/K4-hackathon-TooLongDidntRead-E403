@@ -26,7 +26,7 @@ def migrate_events():
         cursor = conn.cursor()
         for item in items:
             cursor.execute('''
-                INSERT OR IGNORE INTO events (
+                INSERT OR REPLACE INTO events (
                     id, is_mock, title, description, topics, event_type, format, cost, 
                     starts_at, ends_at, registration_deadline, location, organizer, status, source_url, updated_at, conflicts
                 ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)

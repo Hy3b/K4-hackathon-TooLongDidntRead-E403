@@ -44,7 +44,7 @@ const initialNotices: NoticeItem[] = [];
 
 const pageCopy: Record<PageName, { title: string; subtitle: string }> = {
   "Trợ lý sự kiện": {
-    title: "Trợ lý sự kiện VLearn",
+    title: "Trợ lý sự kiện",
     subtitle: "Hỏi về workshop, hoạt động và deadline đăng ký.",
   },
   "Thông báo": {
@@ -201,9 +201,9 @@ export default function Home() {
     <main className="app-shell">
       <aside className="sidebar" aria-label="Điều hướng chính">
         <div className="brand">
-          <div className="brand-mark">V</div>
+          <div className="brand-mark">E</div>
           <div>
-            <strong>VLearn Event AI</strong>
+            <strong>Event AI</strong>
             <span>Event Assistant</span>
           </div>
         </div>
@@ -282,13 +282,6 @@ export default function Home() {
           </div>
           <small className="history-storage">Được lưu tự động</small>
         </section>
-        <div className="profile-card">
-          <div className="avatar">HQ</div>
-          <div>
-            <strong>Huy Quốc</strong>
-            <span>Sinh viên năm nhất</span>
-          </div>
-        </div>
       </aside>
 
       <section className="workspace">
@@ -368,7 +361,7 @@ export default function Home() {
                 {!activeConversation?.messages.length && (
                   <div className="chat-empty">
                     <div className="empty-bot-avatar">✦</div>
-                    <span className="empty-kicker">VLEARN EVENT AI</span>
+                    <span className="empty-kicker">EVENT AI</span>
                     <h2>Hôm nay bạn muốn tìm sự kiện gì?</h2>
                     <p>
                       Hỏi bằng ngôn ngữ tự nhiên. Mình sẽ lọc theo thời gian,
@@ -394,7 +387,7 @@ export default function Home() {
                         <div className="message user-message">
                           {message.content}
                         </div>
-                        <div className="user-avatar">HQ</div>
+                        <div className="user-avatar">Y</div>
                       </div>
                     );
                   }
@@ -407,7 +400,7 @@ export default function Home() {
                           message.error ? "error-message" : ""
                         }`}
                       >
-                        {isStreaming && !message.content && (
+                        {isStreaming && !message.content && (!message.statuses || message.statuses.length === 0) && (
                           <div className="stream-state">
                             <span className="typing-dots">
                               <i />
@@ -415,6 +408,21 @@ export default function Home() {
                               <i />
                             </span>
                             <span>{streamStatus || "Đang suy nghĩ…"}</span>
+                          </div>
+                        )}
+
+                        {isStreaming && message.statuses && message.statuses.length > 0 && (
+                          <div className={`stream-statuses-block active`}>
+                            {message.statuses.map((s, i) => (
+                              <div key={i} className="stream-status-item">
+                                {isStreaming && i === message.statuses!.length - 1 ? (
+                                  <span className="status-icon spinner"></span> 
+                                ) : (
+                                  <span className="status-icon checkmark">✓</span>
+                                )}
+                                <span>{s}</span>
+                              </div>
+                            ))}
                           </div>
                         )}
 
@@ -560,9 +568,7 @@ export default function Home() {
                     Dữ liệu sự kiện minh hoạ · AI có thể hỏi lại khi chưa đủ
                     thông tin
                   </small>
-                  <small>
-                    {loading ? streamStatus : "Lịch sử được lưu tự động"}
-                  </small>
+                  <small>Lịch sử được lưu tự động</small>
                 </div>
               </div>
             </div>
@@ -604,13 +610,13 @@ export default function Home() {
                     <button
                       className={`notification-item ${isRead ? "read" : ""}`}
                       key={notice.id}
-                      onClick={() =>
-                        setReadNotices((current) =>
-                          current.includes(notice.id)
-                            ? current
-                            : [...current, notice.id],
-                        )
-                      }
+                      onClick={() => {
+                        if (!isRead) {
+                          const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8000";
+                          fetch(`${baseUrl}/api/notifications/${notice.id}/read`, { method: 'POST' }).catch(() => {});
+                          setReadNotices((current) => [...current, notice.id]);
+                        }
+                      }}
                     >
                       <span className={`notice-icon ${notice.tone}`}>
                         {notice.icon}
@@ -673,20 +679,44 @@ export default function Home() {
                   const day = index - startOffset + 1;
                   
                   let displayDay = day;
+                  let cellMonth = currentViewMonth;
+                  let cellYear = currentViewYear;
+                  
                   if (day < 1) {
                     displayDay = daysInPrevMonth + day;
+                    cellMonth--;
                   } else if (day > daysInMonth) {
                     displayDay = day - daysInMonth;
+                    cellMonth++;
                   }
                   
-                  const event = day >= 1 && day <= daysInMonth ? viewEvents.find((item) => item.day === day) : undefined;
-                  const isToday = day === now.getDate() && currentViewMonth === now.getMonth() && currentViewYear === now.getFullYear();
+                  if (cellMonth < 0) {
+                    cellMonth = 11;
+                    cellYear--;
+                  } else if (cellMonth > 11) {
+                    cellMonth = 0;
+                    cellYear++;
+                  }
+                  
+                  const event = myEvents.find((item) => {
+                    const parts = item.date.split("/");
+                    if (parts.length === 3) {
+                      const d = parseInt(parts[0], 10);
+                      const m = parseInt(parts[1], 10) - 1;
+                      const y = parseInt(parts[2], 10);
+                      return d === displayDay && m === cellMonth && y === cellYear;
+                    }
+                    return false;
+                  });
+                  
+                  const isToday = displayDay === now.getDate() && cellMonth === now.getMonth() && cellYear === now.getFullYear();
+                  
                   return (
                     <button
                       key={index}
                       className={`${isToday ? "today" : ""} ${event ? "has-event" : ""}`}
                       disabled={day < 1 || day > daysInMonth}
-                      onClick={() => day >= 1 && day <= daysInMonth && event && setDetail(event)}
+                      onClick={() => event && setDetail(event)}
                     >
                       <span>{displayDay}</span>
                       {event && (

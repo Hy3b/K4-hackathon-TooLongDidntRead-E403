@@ -22,11 +22,12 @@ def search_events_node(state: AgentState):
         state["search_results"] = tool_result.get("items", [])
     except Exception as e:
         state["search_results"] = []
+        state["error_code"] = "SEARCH_TOOL_FAILED"
         state["warnings"] = state.get("warnings", []) + ["Lỗi khi gọi tool tìm kiếm."]
     return state
 
-def out_of_scope_node(state: AgentState):
-    state["answer"] = "Xin lỗi, hiện tại trợ lý chỉ hỗ trợ tìm kiếm sự kiện. Các chức năng khác như đăng ký sự kiện chưa được hỗ trợ."
+def direct_answer_node(state: AgentState):
+    state["answer"] = state.get("direct_answer") or "Xin lỗi, mình chưa hiểu ý bạn lắm."
     state["suggested_actions"] = []
     return state
 
@@ -34,8 +35,11 @@ def route_after_understand(state: AgentState):
     intent = state.get("intent")
     missing_fields = state.get("missing_fields", [])
     
+    if intent in {"direct_answer", "greeting", "capabilities", "error"}:
+        return "direct_answer"
+        
     if intent not in ["search_events"]:
-        return "out_of_scope"
+        return "direct_answer"
         
     if missing_fields:
         return "ask_clarification"
@@ -43,31 +47,34 @@ def route_after_understand(state: AgentState):
     return "search_events"
 
 # Xây dựng graph
-workflow = StateGraph(AgentState)
+def build_graph():
+    workflow = StateGraph(AgentState)
+    
+    workflow.add_node("understand_query", understand_query_node)
+    workflow.add_node("ask_clarification", ask_clarification_node)
+    workflow.add_node("search_events", search_events_node)
+    workflow.add_node("validate_results", validate_results_node)
+    workflow.add_node("compose_response", compose_response_node)
+    workflow.add_node("direct_answer", direct_answer_node)
+    
+    workflow.set_entry_point("understand_query")
+    
+    workflow.add_conditional_edges(
+        "understand_query",
+        route_after_understand,
+        {
+            "ask_clarification": "ask_clarification",
+            "search_events": "search_events",
+            "direct_answer": "direct_answer"
+        }
+    )
+    
+    workflow.add_edge("ask_clarification", END)
+    workflow.add_edge("direct_answer", END)
+    workflow.add_edge("search_events", "validate_results")
+    workflow.add_edge("validate_results", "compose_response")
+    workflow.add_edge("compose_response", END)
+    
+    return workflow.compile()
 
-workflow.add_node("understand_query", understand_query_node)
-workflow.add_node("ask_clarification", ask_clarification_node)
-workflow.add_node("out_of_scope", out_of_scope_node)
-workflow.add_node("search_events", search_events_node)
-workflow.add_node("validate_results", validate_results_node)
-workflow.add_node("compose_response", compose_response_node)
-
-workflow.set_entry_point("understand_query")
-
-workflow.add_conditional_edges(
-    "understand_query",
-    route_after_understand,
-    {
-        "ask_clarification": "ask_clarification",
-        "out_of_scope": "out_of_scope",
-        "search_events": "search_events"
-    }
-)
-
-workflow.add_edge("ask_clarification", END)
-workflow.add_edge("out_of_scope", END)
-workflow.add_edge("search_events", "validate_results")
-workflow.add_edge("validate_results", "compose_response")
-workflow.add_edge("compose_response", END)
-
-agent_app = workflow.compile()
+agent_app = build_graph()

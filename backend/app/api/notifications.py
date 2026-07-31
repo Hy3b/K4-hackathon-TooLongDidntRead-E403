@@ -67,9 +67,17 @@ def get_notifications():
         return [dict(row) for row in cursor.fetchall()]
 
 @router.post("/read")
-def mark_read():
+def mark_all_read():
     with get_db() as conn:
         cursor = conn.cursor()
         cursor.execute("UPDATE notifications SET is_read = 1 WHERE is_read = 0")
+        conn.commit()
+    return {"status": "ok"}
+
+@router.post("/{notification_id}/read")
+def mark_one_read(notification_id: str):
+    with get_db() as conn:
+        cursor = conn.cursor()
+        cursor.execute("UPDATE notifications SET is_read = 1 WHERE id = ?", (notification_id,))
         conn.commit()
     return {"status": "ok"}
