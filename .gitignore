@@ -69,3 +69,7 @@ venv.bak/
 
 # Evaluation traces
 backend/eval/results/traces/*.json
+
+# Git backup folders
+.git_backup/
+
