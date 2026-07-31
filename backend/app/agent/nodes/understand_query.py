@@ -48,10 +48,16 @@ def understand_query_node(state: AgentState):
         
     llm = ChatOpenAI(**llm_kwargs)
     
-    prompt = ChatPromptTemplate.from_messages([
-        ("system", UNDERSTAND_QUERY_PROMPT),
-        ("user", "{message}")
-    ])
+    messages = [("system", UNDERSTAND_QUERY_PROMPT)]
+    raw_history = state.get("history") or []
+    for item in raw_history[-4:]:
+        role = item.get("role")
+        content = item.get("content")
+        if role in ["user", "assistant"] and content:
+            messages.append((role, content))
+    messages.append(("user", "{message}"))
+
+    prompt = ChatPromptTemplate.from_messages(messages)
     
     llm_with_tools = llm.bind_tools([UnderstandQueryResult])
     chain = prompt | llm_with_tools

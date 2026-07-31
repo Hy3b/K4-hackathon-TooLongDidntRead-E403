@@ -289,6 +289,17 @@ export function useChatHistory() {
     }
   }
 
+  function clearActiveMessages() {
+    if (loading || !activeId) return;
+    updateConversation(activeId, (conversation) => ({
+      ...conversation,
+      updatedAt: Date.now(),
+      messages: [],
+    }));
+    setStreamStatus("");
+    scheduleRemoteSave(activeId);
+  }
+
   async function ask(text: string) {
     const trimmed = text.trim();
     if (!trimmed || loading || !activeConversation) return;
@@ -296,6 +307,25 @@ export function useChatHistory() {
     const requestId = ++latestRequest.current;
     const conversationId = activeConversation.id;
     const now = Date.now();
+
+    const existingUserMsgs = activeConversation.messages.filter(
+      (m) => m.role === "user",
+    );
+    let currentMessages = activeConversation.messages;
+
+    // Reset session automatically when user reaches 4 user messages
+    if (existingUserMsgs.length >= 4) {
+      currentMessages = [];
+    }
+
+    const historyPayload = currentMessages
+      .filter((m) => m.content && !m.error)
+      .slice(-4)
+      .map((m) => ({
+        role: m.role,
+        content: m.content,
+      }));
+
     const userMessage: ChatMessage = {
       id: crypto.randomUUID(),
       role: "user",
@@ -319,14 +349,18 @@ export function useChatHistory() {
     updateConversation(conversationId, (conversation) => ({
       ...conversation,
       title:
-        conversation.messages.length === 0
+        currentMessages.length === 0
           ? titleFrom(trimmed)
           : conversation.title,
       updatedAt: now,
-      messages: [...conversation.messages, userMessage, assistantMessage],
+      messages: [...currentMessages, userMessage, assistantMessage],
     }));
     setLoading(true);
-    setStreamStatus("Đang kết nối với trợ lý…");
+    setStreamStatus(
+      existingUserMsgs.length >= 4
+        ? "Đã đạt 4 câu hỏi. Tự động reset Session mới…"
+        : "Đang kết nối với trợ lý…",
+    );
 
     try {
       const baseUrl =
@@ -337,6 +371,7 @@ export function useChatHistory() {
         body: JSON.stringify({
           conversation_id: conversationId,
           message: trimmed,
+          history: historyPayload,
         }),
       });
       if (!response.ok || !response.body) {
@@ -452,5 +487,7 @@ export function useChatHistory() {
     newConversation,
     selectConversation,
     deleteConversation,
+    clearActiveMessages,
   };
 }
+

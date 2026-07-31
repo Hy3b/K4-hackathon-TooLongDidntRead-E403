@@ -37,19 +37,116 @@ const suggestions = [
   "Có sự kiện miễn phí hôm nay không?",
 ];
 
-const events: EventItem[] = [
-  { title: "Workshop “CV đầu tiên của bạn”", date: "03/08/2026", day: 3, time: "18:30", place: "Hội trường A", organizer: "Phòng CTSV", category: "Kỹ năng", status: "Còn 1 ngày đăng ký" },
-  { title: "Tech Talk: Từ ý tưởng đến MVP", date: "07/08/2026", day: 7, time: "15:00", place: "Lab 5.2", organizer: "CLB Công nghệ", category: "Công nghệ", status: "Đã tạo lời nhắc" },
-  { title: "Ngày xanh VLearn", date: "15/08/2026", day: 15, time: "14:00", place: "Sân trường", organizer: "Đoàn trường", category: "Cộng đồng", status: "Đã cập nhật giờ" },
-  { title: "Talkshow: Học hiệu quả cùng AI", date: "22/08/2026", day: 22, time: "09:00", place: "Phòng B204", organizer: "VLearn", category: "Học tập", status: "Mở đăng ký" },
-];
+const categoryMap: Record<string, string> = {
+  technology: "Công nghệ",
+  career: "Kỹ năng",
+  skills: "Kỹ năng",
+  learning: "Học tập",
+  community: "Cộng đồng",
+};
 
-const notices: NoticeItem[] = [
-  { id: 1, icon: "⌛", tone: "yellow", title: "Workshop CV sắp hết hạn", text: "Deadline đăng ký còn 1 ngày. Hãy kiểm tra thông tin trước khi đăng ký.", time: "10 phút", category: "Deadline" },
-  { id: 2, icon: "✦", tone: "blue", title: "Có sự kiện mới phù hợp", text: "Tech Talk “Từ ý tưởng đến MVP” phù hợp với chủ đề công nghệ bạn quan tâm.", time: "1 giờ", category: "Gợi ý" },
-  { id: 3, icon: "⚠", tone: "red", title: "Lịch sự kiện có thay đổi", text: "Buổi “Ngày xanh” đã đổi từ sáng Chủ nhật sang 14:00 thứ Bảy.", time: "2 giờ", category: "Thay đổi" },
-  { id: 4, icon: "✓", tone: "green", title: "Đã tạo lời nhắc", text: "Bạn sẽ được nhắc trước Tech Talk 24 giờ.", time: "Hôm qua", category: "Nhắc lịch" },
-];
+function formatEventStatus(event: any): string {
+  if (event.status === "cancelled") return "Đã hủy";
+  if (event.status === "needs_confirmation") return "Cần xác nhận";
+  if (event.registration_deadline) {
+    const deadline = new Date(event.registration_deadline);
+    const now = new Date();
+    const diffHours = (deadline.getTime() - now.getTime()) / (1000 * 3600);
+    if (diffHours > 0 && diffHours < 48) {
+      return `Còn ${Math.ceil(diffHours / 24)} ngày đăng ký`;
+    }
+  }
+  return "Đang mở";
+}
+
+function mapRawToEventItems(rawItems: any[]): EventItem[] {
+  return rawItems
+    .filter((e) => e.status !== "cancelled")
+    .map((e) => {
+      const dt = new Date(e.starts_at);
+      const day = dt.getDate();
+      const monthStr = String(dt.getMonth() + 1).padStart(2, "0");
+      const dateStr = `${String(day).padStart(2, "0")}/${monthStr}/${dt.getFullYear()}`;
+      const timeStr = `${String(dt.getHours()).padStart(2, "0")}:${String(dt.getMinutes()).padStart(2, "0")}`;
+      const topicKey = (e.topics && e.topics[0]) || "technology";
+      const category = categoryMap[topicKey] || "Công nghệ";
+
+      return {
+        title: e.title,
+        date: dateStr,
+        day: day,
+        time: timeStr,
+        place: e.location || "Chưa rõ địa điểm",
+        organizer: e.organizer || "Đang cập nhật",
+        category: category,
+        status: formatEventStatus(e),
+      };
+    });
+}
+
+function mapRawToNotices(rawItems: any[]): NoticeItem[] {
+  const noticesList: NoticeItem[] = [];
+  let idCounter = 1;
+
+  for (const item of rawItems) {
+    if (item.status === "needs_confirmation") {
+      noticesList.push({
+        id: idCounter++,
+        icon: "⚠",
+        tone: "red",
+        title: `Lịch sự kiện mâu thuẫn`,
+        text: `Sự kiện "${item.title}" có mâu thuẫn giờ cần xác nhận.`,
+        time: "Mới nhất",
+        category: "Thay đổi",
+      });
+    } else if (item.status === "cancelled") {
+      noticesList.push({
+        id: idCounter++,
+        icon: "⚠",
+        tone: "red",
+        title: `Sự kiện bị hủy`,
+        text: `Buổi "${item.title}" do ${item.organizer} tổ chức đã bị hủy.`,
+        time: "Gần đây",
+        category: "Thay đổi",
+      });
+    } else if (item.registration_deadline) {
+      const deadline = new Date(item.registration_deadline);
+      const now = new Date();
+      const diffHours = (deadline.getTime() - now.getTime()) / (1000 * 3600);
+      if (diffHours > 0 && diffHours < 72) {
+        noticesList.push({
+          id: idCounter++,
+          icon: "⌛",
+          tone: "yellow",
+          title: `Hạn đăng ký: ${item.title}`,
+          text: `Deadline đăng ký: ${new Intl.DateTimeFormat("vi-VN", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" }).format(deadline)}.`,
+          time: `${Math.round(diffHours)} giờ nữa`,
+          category: "Deadline",
+        });
+      }
+    }
+
+    if (item.status === "published" && (item.topics?.includes("technology") || item.topics?.includes("skills"))) {
+      if (noticesList.length < 8) {
+        noticesList.push({
+          id: idCounter++,
+          icon: "✦",
+          tone: "blue",
+          title: "Sự kiện mới phù hợp",
+          text: `${item.title} (${item.organizer}) phù hợp với quan tâm của bạn.`,
+          time: "Gợi ý mới",
+          category: "Gợi ý",
+        });
+      }
+    }
+  }
+
+  return noticesList.slice(0, 8);
+}
+
+const initialEvents: EventItem[] = [];
+
+const initialNotices: NoticeItem[] = [];
 
 const pageCopy: Record<PageName, { title: string; subtitle: string }> = {
   "Trợ lý sự kiện": { title: "Trợ lý sự kiện VLearn", subtitle: "Hỏi về workshop, hoạt động và deadline đăng ký." },
@@ -66,6 +163,22 @@ export default function Home() {
   const [noticeFilter, setNoticeFilter] = useState("Tất cả");
   const [readNotices, setReadNotices] = useState<number[]>([4]);
   const [monthOffset, setMonthOffset] = useState(0);
+  const [events, setEvents] = useState<EventItem[]>(initialEvents);
+  const [notices, setNotices] = useState<NoticeItem[]>(initialNotices);
+
+  useEffect(() => {
+    const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "";
+    fetch(`${baseUrl}/api/events`)
+      .then((res) => res.json())
+      .then((data) => {
+        if (data?.items && Array.isArray(data.items) && data.items.length > 0) {
+          setEvents(mapRawToEventItems(data.items));
+          setNotices(mapRawToNotices(data.items));
+        }
+      })
+      .catch(() => {});
+  }, []);
+
 
   const chatScrollRef = useRef<HTMLDivElement>(null);
   const {
@@ -79,6 +192,7 @@ export default function Home() {
     newConversation,
     selectConversation,
     deleteConversation,
+    clearActiveMessages,
   } = useChatHistory();
 
   const filteredNotices = noticeFilter === "Tất cả" ? notices : notices.filter((item) => item.category === noticeFilter);
@@ -460,8 +574,7 @@ export default function Home() {
                 </form>
                 <div className="composer-meta">
                   <small>
-                    Dữ liệu sự kiện minh hoạ · AI có thể hỏi lại khi chưa đủ
-                    thông tin
+                    Bộ nhớ Session: {activeConversation?.messages.filter((m) => m.role === "user").length || 0}/4 câu hỏi {((activeConversation?.messages.filter((m) => m.role === "user").length) || 0) >= 4 ? "• Tự động reset ở câu tới" : ""}
                   </small>
                   <small>{loading ? streamStatus : "Lịch sử được lưu tự động"}</small>
                 </div>

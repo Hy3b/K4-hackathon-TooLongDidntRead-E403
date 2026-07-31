@@ -25,10 +25,15 @@ def save_trace_best_effort(trace_data: dict[str, Any]) -> None:
     except OSError:
         logger.exception("Failed to persist request trace")
 
+class HistoryMessage(BaseModel):
+    role: str
+    content: str
+
 class ChatRequest(BaseModel):
     conversation_id: str = Field(min_length=1, max_length=100)
     message: str = Field(min_length=1, max_length=2000)
     current_date: Optional[datetime] = None
+    history: List[HistoryMessage] = Field(default_factory=list)
 
 class ChatResponse(BaseModel):
     conversation_id: str
@@ -72,6 +77,7 @@ async def chat_endpoint(request: ChatRequest):
         "message": request.message,
         "current_date": current_date,
         "trace_id": trace_id,
+        "history": [h.model_dump() for h in request.history],
         "warnings": [],
         "missing_fields": [],
         "search_results": [],
@@ -199,3 +205,11 @@ async def chat_stream_endpoint(request: ChatRequest):
             "X-Accel-Buffering": "no",
         },
     )
+
+
+@router.get("/events")
+async def get_events_endpoint():
+    from app.events.repository import JsonEventRepository
+    repo = JsonEventRepository()
+    return {"items": repo.search({"include_cancelled": True})}
+

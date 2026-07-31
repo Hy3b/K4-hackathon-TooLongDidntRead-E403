@@ -15,3 +15,5 @@ class AgentState(TypedDict):
     suggested_actions: List[str]
     trace_id: str
     warnings: List[str]
+    history: Optional[List[Dict[str, str]]]
+
