@@ -111,7 +111,7 @@ Lát cắt này giữ được nhu cầu đã chứng minh nhưng khớp với p
 ### Mức prototype và phần thật/mock
 
 - **Mức nhắm tới:** Working vertical slice.
-- **Chạy thật:** `POST /api/chat`; model qua OpenAI-compatible API; structured tool call để nhận diện intent/filter; LangGraph routing; `search_events`; validation trạng thái; grounded response; trace; golden-set runner.
+- **Chạy thật:** `POST /api/chat`; model qua OpenAI-compatible API; LangGraph chia workflow thành các node; System Prompt nhận diện intent/filter; Function Calling tạo structured call `search_events`; backend kiểm soát và thực thi tool; grounded response; trace; golden-set runner.
 - **Mock:** `backend/data/events.json` là dữ liệu tự sinh; các URL dùng `.invalid`; trang Thông báo/Lịch; thao tác tạo lời nhắc; crawler và notification.
 - **Ranh giới an toàn:** UI/demo phải ghi rõ dữ liệu minh họa, không ngụ ý đang đọc trực tiếp hệ thống VLearn.
 

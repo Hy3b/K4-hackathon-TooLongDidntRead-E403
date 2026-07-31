@@ -3,10 +3,23 @@ from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from app.api.chat import router as chat_router
 from app.config import get_settings
-from app.events.repository import JsonEventRepository
-import json
+from app.events.repository import SqliteEventRepository
+from app.api.notifications import router as notifications_router, reminders_router
+from app.events.scheduler import check_reminders_task
+from app.database import init_db, get_db
+import asyncio
+import contextlib
 
-app = FastAPI(title="CP3 Event Assistant API")
+@contextlib.asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Khởi tạo DB
+    init_db()
+    # Khởi chạy background task khi app start
+    task = asyncio.create_task(check_reminders_task())
+    yield
+    task.cancel()
+
+app = FastAPI(title="CP3 Event Assistant API", lifespan=lifespan)
 
 settings = get_settings()
 
@@ -19,6 +32,8 @@ app.add_middleware(
 )
 
 app.include_router(chat_router, prefix="/api")
+app.include_router(notifications_router, prefix="/api")
+app.include_router(reminders_router, prefix="/api")
 
 @app.get("/health")
 async def health_check():
@@ -27,9 +42,10 @@ async def health_check():
 @app.get("/ready")
 async def ready_check():
     try:
-        JsonEventRepository()
+        with get_db() as conn:
+            conn.execute("SELECT 1 FROM events LIMIT 1")
         data_ok = True
-    except (OSError, ValueError, json.JSONDecodeError):
+    except Exception:
         data_ok = False
     key_ok = settings.model_api_key not in {"", "dummy", "replace-me"}
     

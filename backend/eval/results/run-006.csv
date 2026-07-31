@@ -1,0 +1,25 @@
+id,intent_pass,filter_pass,tool_pass,retrieval_pass,groundedness_pass,behavior_pass,overall_pass,latency_ms,actual_intent,actual_behavior,actual_event_ids,trace_id,error
+GS-001,False,False,False,False,False,False,False,47038,,,[],,timed out
+GS-002,False,False,False,False,False,False,False,47065,,,[],,timed out
+GS-003,False,False,False,False,True,False,False,33193,error,refuse_action,[],run_c9fe2e162dba4a649b79686b6bdb35a4,
+GS-004,False,False,False,False,True,False,False,1855,error,refuse_action,[],run_3ed5297552e24d60b6bcd56b071d312c,
+GS-005,False,False,False,False,True,False,False,1880,error,refuse_action,[],run_748a714df5d04e00bd0f03fd7e68deab,
+GS-006,False,False,False,False,True,False,False,1983,error,refuse_action,[],run_7a09920c31664f50a2881cc3e92d5a21,
+GS-007,False,False,False,False,True,False,False,1864,error,refuse_action,[],run_b5b8e8766e3e41049e733a5ae28823e2,
+GS-008,False,False,False,False,True,False,False,2298,error,refuse_action,[],run_39ce071258a341c68d77e29290a32570,
+GS-009,False,False,False,False,False,False,False,45007,,,[],,timed out
+GS-010,False,False,False,False,False,False,False,47046,,,[],,timed out
+GS-011,False,False,False,False,False,False,False,47057,,,[],,timed out
+GS-012,False,False,False,False,False,False,False,47051,,,[],,timed out
+GS-013,False,True,True,True,True,True,False,28157,error,refuse_action,[],run_3f199bc7e4404ccfb841647079403748,
+GS-014,False,True,True,True,True,True,False,6210,error,refuse_action,[],run_09ba0dfcfdbd41db8519cbc6f46609d8,
+GS-015,False,False,False,False,True,False,False,18680,error,refuse_action,[],run_52fdbe36e00f47c2807b66c17725776b,
+GS-016,False,False,False,False,False,False,False,45007,,,[],,timed out
+GS-017,False,False,False,False,True,False,False,20945,error,refuse_action,[],run_a5f765e4267747daab080d478d6f9158,
+GS-018,False,False,False,False,False,False,False,45016,,,[],,timed out
+GS-019,False,False,False,False,True,False,False,6295,error,refuse_action,[],run_83c0cac1b3594735a4a2e0e9835f1aa7,
+GS-020,False,False,False,False,False,False,False,45004,,,[],,timed out
+GS-021,False,False,False,False,True,False,False,3940,error,refuse_action,[],run_36eba747b796476f94126ad952c74536,
+GS-022,False,False,False,False,True,False,False,1734,error,refuse_action,[],run_1542a542fb8a432e9410cbc78f1d132e,
+GS-023,False,False,False,True,True,False,False,1831,error,refuse_action,[],run_81f9c26001e74b34a834abf4757f4502,
+GS-024,False,False,False,True,True,False,False,1813,error,refuse_action,[],run_afda44507e1d41eeaa28ed2cbb3b8011,

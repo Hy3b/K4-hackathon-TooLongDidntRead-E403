@@ -5,6 +5,7 @@ import { ChatEvent, useChatHistory } from "./use-chat-history";
 
 type PageName = "Trợ lý sự kiện" | "Thông báo" | "Lịch của tôi";
 type EventItem = {
+  id?: string;
   title: string;
   date: string;
   day: number;
@@ -16,13 +17,14 @@ type EventItem = {
 };
 
 type NoticeItem = {
-  id: number;
+  id: string | number;
   icon: string;
   tone: string;
   title: string;
   text: string;
   time: string;
-  category: "Deadline" | "Thay đổi" | "Gợi ý" | "Nhắc lịch";
+  category: "Deadline" | "Thay đổi" | "Gợi ý" | "Nhắc lịch" | string;
+  is_read?: boolean;
 };
 
 const navItems: { icon: string; label: PageName; badge?: number }[] = [
@@ -37,24 +39,22 @@ const suggestions = [
   "Có sự kiện miễn phí hôm nay không?",
 ];
 
-const events: EventItem[] = [
-  { title: "Workshop “CV đầu tiên của bạn”", date: "03/08/2026", day: 3, time: "18:30", place: "Hội trường A", organizer: "Phòng CTSV", category: "Kỹ năng", status: "Còn 1 ngày đăng ký" },
-  { title: "Tech Talk: Từ ý tưởng đến MVP", date: "07/08/2026", day: 7, time: "15:00", place: "Lab 5.2", organizer: "CLB Công nghệ", category: "Công nghệ", status: "Đã tạo lời nhắc" },
-  { title: "Ngày xanh VLearn", date: "15/08/2026", day: 15, time: "14:00", place: "Sân trường", organizer: "Đoàn trường", category: "Cộng đồng", status: "Đã cập nhật giờ" },
-  { title: "Talkshow: Học hiệu quả cùng AI", date: "22/08/2026", day: 22, time: "09:00", place: "Phòng B204", organizer: "VLearn", category: "Học tập", status: "Mở đăng ký" },
-];
 
-const notices: NoticeItem[] = [
-  { id: 1, icon: "⌛", tone: "yellow", title: "Workshop CV sắp hết hạn", text: "Deadline đăng ký còn 1 ngày. Hãy kiểm tra thông tin trước khi đăng ký.", time: "10 phút", category: "Deadline" },
-  { id: 2, icon: "✦", tone: "blue", title: "Có sự kiện mới phù hợp", text: "Tech Talk “Từ ý tưởng đến MVP” phù hợp với chủ đề công nghệ bạn quan tâm.", time: "1 giờ", category: "Gợi ý" },
-  { id: 3, icon: "⚠", tone: "red", title: "Lịch sự kiện có thay đổi", text: "Buổi “Ngày xanh” đã đổi từ sáng Chủ nhật sang 14:00 thứ Bảy.", time: "2 giờ", category: "Thay đổi" },
-  { id: 4, icon: "✓", tone: "green", title: "Đã tạo lời nhắc", text: "Bạn sẽ được nhắc trước Tech Talk 24 giờ.", time: "Hôm qua", category: "Nhắc lịch" },
-];
+const initialNotices: NoticeItem[] = [];
 
 const pageCopy: Record<PageName, { title: string; subtitle: string }> = {
-  "Trợ lý sự kiện": { title: "Trợ lý sự kiện VLearn", subtitle: "Hỏi về workshop, hoạt động và deadline đăng ký." },
-  "Thông báo": { title: "Thông báo", subtitle: "Theo dõi deadline, cập nhật và lời nhắc sự kiện." },
-  "Lịch của tôi": { title: "Lịch của tôi", subtitle: "Xem toàn bộ sự kiện và lời nhắc theo thời gian." },
+  "Trợ lý sự kiện": {
+    title: "Trợ lý sự kiện VLearn",
+    subtitle: "Hỏi về workshop, hoạt động và deadline đăng ký.",
+  },
+  "Thông báo": {
+    title: "Thông báo",
+    subtitle: "Theo dõi deadline, cập nhật và lời nhắc sự kiện.",
+  },
+  "Lịch của tôi": {
+    title: "Lịch của tôi",
+    subtitle: "Xem toàn bộ sự kiện và lời nhắc theo thời gian.",
+  },
 };
 
 export default function Home() {
@@ -63,9 +63,57 @@ export default function Home() {
   const [remindedEvents, setRemindedEvents] = useState<string[]>([]);
   const [detail, setDetail] = useState<EventItem | null>(null);
   const [toast, setToast] = useState("");
-  const [noticeFilter, setNoticeFilter] = useState("Tất cả");
-  const [readNotices, setReadNotices] = useState<number[]>([4]);
+  const [notices, setNotices] = useState<NoticeItem[]>(initialNotices);
+  const [readNotices, setReadNotices] = useState<(string | number)[]>([]);
+  const [myEvents, setMyEvents] = useState<EventItem[]>([]);
   const [monthOffset, setMonthOffset] = useState(0);
+
+  const fetchData = async () => {
+    try {
+      const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8000";
+      
+      // Fetch notices
+      const resNotices = await fetch(`${baseUrl}/api/notifications`);
+      if (resNotices.ok) {
+        const data = await resNotices.json();
+        setNotices(data);
+        const readIds = data.filter((n: any) => n.is_read).map((n: any) => n.id);
+        setReadNotices(readIds);
+      }
+      
+      // Fetch reminders for calendar
+      const resReminders = await fetch(`${baseUrl}/api/reminders`);
+      if (resReminders.ok) {
+        const data = await resReminders.json();
+        const mapped: EventItem[] = data.map((r: any) => {
+          let d = new Date();
+          if (r.starts_at) {
+             d = new Date(r.starts_at);
+          }
+          return {
+            id: r.event_id,
+            title: r.event_title,
+            date: d.toLocaleDateString("vi-VN"),
+            day: d.getDate(),
+            time: d.toLocaleTimeString("vi-VN", { hour: "2-digit", minute: "2-digit" }),
+            place: r.place || "Chưa cập nhật",
+            organizer: r.organizer || "Chưa rõ",
+            category: (r.category || "Sự kiện").charAt(0).toUpperCase() + (r.category || "sự kiện").slice(1),
+            status: r.status === "published" ? "Sắp diễn ra" : (r.status || "Chưa rõ"),
+          };
+        });
+        setMyEvents(mapped);
+      }
+    } catch (e) {
+      console.error("Failed to fetch data", e);
+    }
+  };
+
+  useEffect(() => {
+    void fetchData();
+    const interval = setInterval(fetchData, 5000);
+    return () => clearInterval(interval);
+  }, []);
 
   const chatScrollRef = useRef<HTMLDivElement>(null);
   const {
@@ -81,9 +129,9 @@ export default function Home() {
     deleteConversation,
   } = useChatHistory();
 
-  const filteredNotices = noticeFilter === "Tất cả" ? notices : notices.filter((item) => item.category === noticeFilter);
   const monthLabels = ["Tháng 7, 2026", "Tháng 8, 2026", "Tháng 9, 2026"];
   const monthLabel = monthLabels[monthOffset + 1];
+  const unreadCount = Math.max(0, notices.length - readNotices.length);
 
   function notify(text: string) {
     setToast(text);
@@ -134,15 +182,26 @@ export default function Home() {
       <aside className="sidebar" aria-label="Điều hướng chính">
         <div className="brand">
           <div className="brand-mark">V</div>
-          <div><strong>VLearn Event AI</strong><span>Event Assistant</span></div>
+          <div>
+            <strong>VLearn Event AI</strong>
+            <span>Event Assistant</span>
+          </div>
         </div>
         <nav>
           <p className="nav-heading">CHÍNH</p>
           {navItems.map((item) => (
-            <button className={`nav-item ${active === item.label ? "active" : ""}`} key={item.label} onClick={() => navigate(item.label)}>
+            <button
+              className={`nav-item ${active === item.label ? "active" : ""}`}
+              key={item.label}
+              onClick={() => navigate(item.label)}
+            >
               <span className="nav-icon">{item.icon}</span>
               <span>{item.label}</span>
-              {item.badge && <b className="badge">{Math.max(0, notices.length - readNotices.length)}</b>}
+              {item.badge && unreadCount > 0 && (
+                <b className="badge">
+                  {unreadCount}
+                </b>
+              )}
             </button>
           ))}
         </nav>
@@ -161,7 +220,9 @@ export default function Home() {
             </button>
           </div>
           <div className="history-list">
-            {!historyReady && <p className="history-empty">Đang tải lịch sử…</p>}
+            {!historyReady && (
+              <p className="history-empty">Đang tải lịch sử…</p>
+            )}
             {historyReady &&
               conversations.map((conversation) => (
                 <div
@@ -201,11 +262,21 @@ export default function Home() {
           </div>
           <small className="history-storage">Được lưu tự động</small>
         </section>
+        <div className="profile-card">
+          <div className="avatar">HQ</div>
+          <div>
+            <strong>Huy Quốc</strong>
+            <span>Sinh viên năm nhất</span>
+          </div>
+        </div>
       </aside>
 
       <section className="workspace">
         <header className="topbar">
-          <div><h1>{pageCopy[active].title}</h1><p>{pageCopy[active].subtitle}</p></div>
+          <div>
+            <h1>{pageCopy[active].title}</h1>
+            <p>{pageCopy[active].subtitle}</p>
+          </div>
           <div className="topbar-actions">
             {active === "Trợ lý sự kiện" && (
               <button
@@ -216,17 +287,41 @@ export default function Home() {
                 <span>＋</span> Chat mới
               </button>
             )}
-            <button className="icon-button" aria-label="Mở trang thông báo" onClick={() => navigate("Thông báo")}>🔔<i>{Math.max(0, notices.length - readNotices.length)}</i></button>
+            <button
+              className="icon-button"
+              aria-label="Mở trang thông báo"
+              onClick={() => navigate("Thông báo")}
+            >
+              🔔{unreadCount > 0 && <i>{unreadCount}</i>}
+            </button>
           </div>
         </header>
 
-        <nav className="mobile-nav" aria-label="Điều hướng trên thiết bị di động">
-          {navItems.map((item) => <button key={item.label} className={active === item.label ? "active" : ""} onClick={() => navigate(item.label)}><span>{item.icon}</span>{item.label}</button>)}
+        <nav
+          className="mobile-nav"
+          aria-label="Điều hướng trên thiết bị di động"
+        >
+          {navItems.map((item) => (
+            <button
+              key={item.label}
+              className={active === item.label ? "active" : ""}
+              onClick={() => navigate(item.label)}
+            >
+              <span>{item.icon}</span>
+              {item.label}
+            </button>
+          ))}
         </nav>
 
         {active === "Trợ lý sự kiện" && (
-          <section className="assistant-page" aria-label="Hội thoại trợ lý sự kiện">
-            <div className="mobile-history-bar" aria-label="Chuyển cuộc trò chuyện">
+          <section
+            className="assistant-page"
+            aria-label="Hội thoại trợ lý sự kiện"
+          >
+            <div
+              className="mobile-history-bar"
+              aria-label="Chuyển cuộc trò chuyện"
+            >
               <span>Lịch sử</span>
               <div>
                 {conversations.map((conversation) => (
@@ -279,7 +374,7 @@ export default function Home() {
                         <div className="message user-message">
                           {message.content}
                         </div>
-                        <div className="user-avatar">U</div>
+                        <div className="user-avatar">HQ</div>
                       </div>
                     );
                   }
@@ -300,47 +395,6 @@ export default function Home() {
                               <i />
                             </span>
                             <span>{streamStatus || "Đang suy nghĩ…"}</span>
-                          </div>
-                        )}
-
-                        {message.activities && message.activities.length > 0 && (
-                          <div className="activity-timeline">
-                            {message.activities.map((activity) => {
-                              if (activity.type === "tool_call") {
-                                return (
-                                  <details key={activity.id} className="tool-card">
-                                    <summary>
-                                      <div className="tool-card-header">
-                                        <span className="tool-icon">🛠</span>
-                                        <span className="tool-name">Gọi công cụ: {activity.name}</span>
-                                        {activity.duration != null && <span className="tool-duration">{activity.duration}ms</span>}
-                                      </div>
-                                    </summary>
-                                    <div className="tool-card-body">
-                                      <div className="tool-section">
-                                        <strong>Input</strong>
-                                        <pre><code>{JSON.stringify(activity.input, null, 2)}</code></pre>
-                                      </div>
-                                      <div className="tool-section">
-                                        <strong>Output</strong>
-                                        <pre><code>{activity.output}</code></pre>
-                                      </div>
-                                    </div>
-                                  </details>
-                                );
-                              }
-                              
-                              return (
-                                <div key={activity.id} className="activity-item">
-                                  <span className="activity-dot"></span>
-                                  <div className="activity-content">
-                                    <span className="activity-title">{activity.title}</span>
-                                    {activity.details && <span className="activity-details">{activity.details}</span>}
-                                    {activity.duration != null && <span className="activity-duration">{activity.duration}ms</span>}
-                                  </div>
-                                </div>
-                              );
-                            })}
                           </div>
                         )}
 
@@ -374,7 +428,9 @@ export default function Home() {
                               <article key={event.id} className="event-result">
                                 <div className="event-card-head">
                                   <span className="result-category">
-                                    {(event.topics[0] || "Sự kiện").toUpperCase()}
+                                    {(
+                                      event.topics[0] || "Sự kiện"
+                                    ).toUpperCase()}
                                   </span>
                                   <span
                                     className={`event-status ${
@@ -414,13 +470,23 @@ export default function Home() {
                                 <div className="result-actions">
                                   <button
                                     className="primary-button"
-                                    onClick={() => {
+                                    onClick={async () => {
                                       setRemindedEvents((current) =>
                                         current.includes(event.id)
                                           ? current
                                           : [...current, event.id],
                                       );
-                                      notify("Đã tạo lời nhắc (Mock)");
+                                      try {
+                                        const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8000";
+                                        await fetch(`${baseUrl}/api/reminders`, {
+                                          method: 'POST',
+                                          headers: { 'Content-Type': 'application/json' },
+                                          body: JSON.stringify({ event_id: event.id, event_title: event.title })
+                                        });
+                                        notify("Đã tạo lời nhắc");
+                                      } catch (e) {
+                                        notify("Lỗi khi tạo lời nhắc");
+                                      }
                                     }}
                                   >
                                     {remindedEvents.includes(event.id)
@@ -448,18 +514,35 @@ export default function Home() {
 
               <div className="composer-zone">
                 <div className="suggestion-row" aria-label="Gợi ý câu hỏi">
-                  {suggestions.map((suggestion) => <button key={suggestion} disabled={loading} onClick={() => void ask(suggestion)}>✦ {suggestion}</button>)}
+                  {suggestions.map((suggestion) => (
+                    <button
+                      key={suggestion}
+                      disabled={loading}
+                      onClick={() => void ask(suggestion)}
+                    >
+                      ✦ {suggestion}
+                    </button>
+                  ))}
                 </div>
                 <form className="composer" onSubmit={submit}>
-                  <input aria-label="Nhập câu hỏi về sự kiện" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Hỏi về một sự kiện..." />
-                  <button aria-label="Gửi câu hỏi" disabled={loading}>↑</button>
+                  <input
+                    aria-label="Nhập câu hỏi về sự kiện"
+                    value={query}
+                    onChange={(event) => setQuery(event.target.value)}
+                    placeholder="Hỏi về một sự kiện..."
+                  />
+                  <button aria-label="Gửi câu hỏi" disabled={loading}>
+                    ↑
+                  </button>
                 </form>
                 <div className="composer-meta">
                   <small>
                     Dữ liệu sự kiện minh hoạ · AI có thể hỏi lại khi chưa đủ
                     thông tin
                   </small>
-                  <small>{loading ? streamStatus : "Lịch sử được lưu tự động"}</small>
+                  <small>
+                    {loading ? streamStatus : "Lịch sử được lưu tự động"}
+                  </small>
                 </div>
               </div>
             </div>
@@ -469,22 +552,61 @@ export default function Home() {
         {active === "Thông báo" && (
           <section className="page-content notifications-page">
             <div className="page-toolbar">
-              <div className="filter-tabs" role="tablist">
-                {["Tất cả", "Deadline", "Thay đổi", "Gợi ý"].map((filter) => <button role="tab" aria-selected={noticeFilter === filter} className={noticeFilter === filter ? "active" : ""} key={filter} onClick={() => setNoticeFilter(filter)}>{filter}</button>)}
-              </div>
-              <button className="text-button" onClick={() => { setReadNotices(notices.map((item) => item.id)); notify("Đã đánh dấu tất cả là đã đọc"); }}>Đánh dấu đã đọc</button>
+              <button
+                className="text-button"
+                onClick={async () => {
+                  try {
+                    const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8000";
+                    await fetch(`${baseUrl}/api/notifications/read`, { method: 'POST' });
+                    setReadNotices(notices.map((item) => item.id));
+                    notify("Đã đánh dấu tất cả là đã đọc");
+                  } catch (e) {
+                    notify("Lỗi kết nối");
+                  }
+                }}
+              >
+                Đánh dấu đã đọc
+              </button>
             </div>
             <section className="notification-board">
-              <div className="section-title"><div><h2>Gần đây</h2><p>{notices.length - readNotices.length} thông báo chưa đọc</p></div></div>
+              <div className="section-title">
+                <div>
+                  <h2>Gần đây</h2>
+                  <p>
+                    {unreadCount} thông báo chưa đọc
+                  </p>
+                </div>
+              </div>
               <div className="notification-list full-list">
-                {filteredNotices.map((notice) => {
+                {notices.map((notice) => {
                   const isRead = readNotices.includes(notice.id);
-                  return <button className={`notification-item ${isRead ? "read" : ""}`} key={notice.id} onClick={() => setReadNotices((current) => current.includes(notice.id) ? current : [...current, notice.id])}>
-                    <span className={`notice-icon ${notice.tone}`}>{notice.icon}</span>
-                    <span className="notice-copy"><span className="notice-meta">{notice.category}</span><strong>{notice.title}{!isRead && <i />}</strong><small>{notice.text}</small></span>
-                    <time>{notice.time}</time>
-                    <span className="notice-arrow">›</span>
-                  </button>;
+                  return (
+                    <button
+                      className={`notification-item ${isRead ? "read" : ""}`}
+                      key={notice.id}
+                      onClick={() =>
+                        setReadNotices((current) =>
+                          current.includes(notice.id)
+                            ? current
+                            : [...current, notice.id],
+                        )
+                      }
+                    >
+                      <span className={`notice-icon ${notice.tone}`}>
+                        {notice.icon}
+                      </span>
+                      <span className="notice-copy">
+                        <span className="notice-meta">{notice.category}</span>
+                        <strong>
+                          {notice.title}
+                          {!isRead && <i />}
+                        </strong>
+                        <small>{notice.text}</small>
+                      </span>
+                      <time>{notice.time}</time>
+                      <span className="notice-arrow">›</span>
+                    </button>
+                  );
                 })}
               </div>
             </section>
@@ -495,32 +617,145 @@ export default function Home() {
           <section className="page-content calendar-page">
             <section className="calendar-card">
               <div className="calendar-head">
-                <div><h2>{monthLabel}</h2><p>{monthOffset === 0 ? "4 sự kiện trong tháng" : "Chưa có sự kiện"}</p></div>
-                <div className="calendar-controls"><button aria-label="Tháng trước" disabled={monthOffset === -1} onClick={() => setMonthOffset((value) => value - 1)}>‹</button><button onClick={() => setMonthOffset(0)}>Hôm nay</button><button aria-label="Tháng sau" disabled={monthOffset === 1} onClick={() => setMonthOffset((value) => value + 1)}>›</button></div>
+                <div>
+                  <h2>{monthLabel}</h2>
+                  <p>
+                    {monthOffset === 0
+                      ? `${myEvents.length} sự kiện trong tháng`
+                      : "Chưa có sự kiện"}
+                  </p>
+                </div>
+                <div className="calendar-controls">
+                  <button
+                    aria-label="Tháng trước"
+                    disabled={monthOffset === -1}
+                    onClick={() => setMonthOffset((value) => value - 1)}
+                  >
+                    ‹
+                  </button>
+                  <button onClick={() => setMonthOffset(0)}>Hôm nay</button>
+                  <button
+                    aria-label="Tháng sau"
+                    disabled={monthOffset === 1}
+                    onClick={() => setMonthOffset((value) => value + 1)}
+                  >
+                    ›
+                  </button>
+                </div>
               </div>
-              <div className="calendar-grid calendar-weekdays">{["T2", "T3", "T4", "T5", "T6", "T7", "CN"].map((day) => <span key={day}>{day}</span>)}</div>
+              <div className="calendar-grid calendar-weekdays">
+                {["T2", "T3", "T4", "T5", "T6", "T7", "CN"].map((day) => (
+                  <span key={day}>{day}</span>
+                ))}
+              </div>
               <div className="calendar-grid calendar-days">
                 {Array.from({ length: 35 }, (_, index) => {
                   const day = index - 4;
-                  const event = monthOffset === 0 ? events.find((item) => item.day === day) : undefined;
-                  return <button key={index} className={`${day === 7 && monthOffset === 0 ? "today" : ""} ${event ? "has-event" : ""}`} disabled={day < 1 || day > 31} onClick={() => event && setDetail(event)}><span>{day > 0 && day <= 31 ? day : ""}</span>{event && <i className={`event-dot dot-${event.category.toLowerCase().replace("ỹ", "y").replace("ệ", "e")}`} />}</button>;
+                  const event =
+                    monthOffset === 0
+                      ? myEvents.find((item) => item.day === day)
+                      : undefined;
+                  return (
+                    <button
+                      key={index}
+                      className={`${day === 7 && monthOffset === 0 ? "today" : ""} ${event ? "has-event" : ""}`}
+                      disabled={day < 1 || day > 31}
+                      onClick={() => event && setDetail(event)}
+                    >
+                      <span>{day > 0 && day <= 31 ? day : ""}</span>
+                      {event && (
+                        <i
+                          className={`event-dot dot-${event.category.toLowerCase().replace("ỹ", "y").replace("ệ", "e")}`}
+                        />
+                      )}
+                    </button>
+                  );
                 })}
               </div>
             </section>
 
             <aside className="agenda-card">
-              <div className="section-title"><div><h2>Sắp tới</h2><p>Các sự kiện đã thêm vào lịch</p></div><button onClick={() => notify("Đã mở chế độ thêm sự kiện")}>+ Thêm</button></div>
+              <div className="section-title">
+                <div>
+                  <h2>Sắp tới</h2>
+                  <p>Các sự kiện đã thêm vào lịch</p>
+                </div>
+              </div>
               <div className="agenda-list">
-                {(monthOffset === 0 ? events : []).map((event) => <button className="agenda-item" key={event.title} onClick={() => setDetail(event)}><span className="agenda-date"><b>{event.day.toString().padStart(2, "0")}</b><small>THÁNG 8</small></span><span className="agenda-copy"><small>{event.time} · {event.category}</small><strong>{event.title}</strong><span>{event.place}</span></span><span className="notice-arrow">›</span></button>)}
-                {monthOffset !== 0 && <div className="empty-state"><span>▦</span><strong>Chưa có sự kiện</strong><p>Các sự kiện bạn thêm sẽ xuất hiện tại đây.</p></div>}
+                {(monthOffset === 0 ? myEvents : []).map((event) => (
+                  <button
+                    className="agenda-item"
+                    key={event.title}
+                    onClick={() => setDetail(event)}
+                  >
+                    <span className="agenda-date">
+                      <b>{event.day.toString().padStart(2, "0")}</b>
+                      <small>THÁNG 8</small>
+                    </span>
+                    <span className="agenda-copy">
+                      <small>
+                        {event.time} · {event.category}
+                      </small>
+                      <strong>{event.title}</strong>
+                      <span>{event.place}</span>
+                    </span>
+                    <span className="notice-arrow">›</span>
+                  </button>
+                ))}
+                {monthOffset !== 0 && (
+                  <div className="empty-state">
+                    <span>▦</span>
+                    <strong>Chưa có sự kiện</strong>
+                    <p>Các sự kiện bạn thêm sẽ xuất hiện tại đây.</p>
+                  </div>
+                )}
               </div>
             </aside>
           </section>
         )}
       </section>
 
-      {detail && <div className="modal-backdrop" onClick={() => setDetail(null)}><section className="event-modal" role="dialog" aria-modal="true" aria-labelledby="event-title" onClick={(event) => event.stopPropagation()}><button className="modal-close" aria-label="Đóng" onClick={() => setDetail(null)}>×</button><span className="modal-kicker">{detail.category.toUpperCase()} · {detail.date}</span><h2 id="event-title">{detail.title}</h2><p>{detail.time} · {detail.place}</p><div className="detail-grid"><div><span>Đơn vị tổ chức</span><strong>{detail.organizer}</strong></div><div><span>Trạng thái</span><strong>{detail.status}</strong></div></div><div className="modal-actions"><button className="primary-button" onClick={() => { setRemindedEvents((current) => current.includes(detail.title) ? current : [...current, detail.title]); notify("Đã tạo lời nhắc trước sự kiện 24 giờ"); }}>{remindedEvents.includes(detail.title) ? "✓ Đã tạo lời nhắc" : "Tạo lời nhắc"}</button><button className="secondary-button" onClick={() => notify("Đang mở thông tin sự kiện")}>Xem thông tin</button></div></section></div>}
-      {toast && <div className="toast" role="status">{toast}</div>}
+      {detail && (
+        <div className="modal-backdrop" onClick={() => setDetail(null)}>
+          <section
+            className="event-modal"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="event-title"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <button
+              className="modal-close"
+              aria-label="Đóng"
+              onClick={() => setDetail(null)}
+            >
+              ×
+            </button>
+            <span className="modal-kicker">
+              {detail.category.toUpperCase()} · {detail.date}
+            </span>
+            <h2 id="event-title">{detail.title}</h2>
+            <p>
+              {detail.time} · {detail.place}
+            </p>
+            <div className="detail-grid">
+              <div>
+                <span>Đơn vị tổ chức</span>
+                <strong>{detail.organizer}</strong>
+              </div>
+              <div>
+                <span>Trạng thái</span>
+                <strong>{detail.status}</strong>
+              </div>
+            </div>
+          </section>
+        </div>
+      )}
+      {toast && (
+        <div className="toast" role="status">
+          {toast}
+        </div>
+      )}
     </main>
   );
 }

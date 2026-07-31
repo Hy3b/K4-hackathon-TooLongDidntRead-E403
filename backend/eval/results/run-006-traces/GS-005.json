@@ -1,0 +1,24 @@
+{
+  "trace_id": "run_748a714df5d04e00bd0f03fd7e68deab",
+  "conversation_id": "eval_run-006_GS-005",
+  "input": "Hôm nay có hoạt động cộng đồng miễn phí nào?",
+  "current_date": "2026-07-30T10:00:00+07:00",
+  "intent": "error",
+  "filters": {},
+  "route": "out_of_scope",
+  "visited_nodes": [
+    "out_of_scope_response"
+  ],
+  "tool": null,
+  "tool_arguments": {},
+  "tool_result_count": 0,
+  "events": [],
+  "result_status": "success",
+  "latency_ms": 1865,
+  "model": "ag/gemini-3-flash",
+  "model_provider": "openai",
+  "prompt_version": "cp3-v1",
+  "warnings": [],
+  "answer": "Xin lỗi, hiện tại trợ lý chỉ hỗ trợ tìm kiếm sự kiện. Các chức năng khác như đăng ký sự kiện chưa được hỗ trợ.",
+  "timestamp": "2026-07-31T04:11:50.689421+00:00"
+}

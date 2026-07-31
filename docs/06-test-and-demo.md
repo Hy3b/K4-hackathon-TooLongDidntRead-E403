@@ -6,7 +6,7 @@
 - [ ] Tool unit test pass.
 - [ ] API key được đặt trong environment, không nằm trong repo.
 - [ ] Model smoke test thành công.
-- [ ] Graph compile thành công.
+- [ ] Graph compile thành công; tool schema chỉ được bind tại node tìm kiếm.
 - [ ] Prompt có version, ví dụ `cp3-v1`.
 - [ ] Golden set đủ ít nhất 20 case.
 - [ ] `current_date` của eval được cố định.
@@ -144,9 +144,9 @@ Thay đổi câu hỏi/filter sẽ tạo tool arguments khác; trace lưu tool c
 
 Response chỉ được phép dùng tool result; groundedness được chấm trên golden set; no-result có nhánh riêng.
 
-### “LangGraph có cần thiết không?”
+### “Vì sao vẫn dùng LangGraph khi chỉ có một tool?”
 
-Graph làm rõ các nhánh clarification, tool, no-result và conflict; state và trace giúp eval từng quyết định.
+LLM không được giao quyền chạy tool tự do. LangGraph chia để trị các bước hiểu câu hỏi, rẽ nhánh, Function Calling, validate và compose; conditional edges cùng backend enforce allowlist, schema và giới hạn một tool call. Cấu trúc này giúp trace và eval riêng từng quyết định.
 
 ### “Thông báo và lịch đã chạy thật chưa?”
 

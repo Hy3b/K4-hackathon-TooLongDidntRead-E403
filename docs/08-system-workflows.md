@@ -20,7 +20,7 @@ flowchart LR
 Phân biệt rõ:
 
 - AI Model: chạy thật.
-- LangGraph: chạy thật.
+- LangGraph, System Prompt và Function Calling: chạy thật.
 - `search_events`: chạy thật.
 - `events.json`: dữ liệu giả tự sinh.
 - Trang Thông báo và Lịch: vẫn có thể dùng mock UI trong CP3.
@@ -245,4 +245,4 @@ MockJsonEventRepository
 OfficialApiEventRepository hoặc PostgresEventRepository
 ```
 
-Tool contract, Agent graph và response schema nên được giữ nguyên.
+Tool contract, Agent graph, System Prompt contract và response schema nên được giữ nguyên.

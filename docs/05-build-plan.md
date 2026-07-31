@@ -34,16 +34,17 @@ Checkpoint nội bộ:
 
 Không nối model nếu tool chưa đúng.
 
-## Bước 3 — LangGraph và model call thật
+## Bước 3 — LangGraph, System Prompt và Function Calling
 
 Ước lượng: 2–3 giờ.
 
-- Tạo state và structured schema.
-- Viết prompt `understand_query`.
-- Tạo node hỏi lại.
+- Tạo LangGraph state và structured schema.
+- Viết System Prompt cho node nhận diện intent/filter.
+- Tạo conditional edges cho ba nhánh: ngoài phạm vi, hỏi lại, tìm kiếm.
 - Bọc `search_events` thành tool.
-- Tạo node validate result.
-- Tạo node compose response.
+- Tạo node Function Calling chỉ expose `search_events`.
+- Validate tool arguments và result bằng code.
+- Tạo node compose không bind tool.
 - Bật trace.
 
 Checkpoint nội bộ:
@@ -114,7 +115,7 @@ Không dành thời gian polish UI nếu golden set còn lỗi nghiêm trọng.
 | Người | Phần việc |
 |---|---|
 | Backend | FastAPI, repository, tool và API |
-| Agent | LangGraph, prompt, schema và trace |
+| Agent | LangGraph, System Prompt, Function Calling, schema và trace |
 | Frontend | Kết nối API và render response |
 | Eval/Data | events.json, golden set, runner và summary |
 | Product | Spec, quality bar, demo script và log quyết định |

@@ -5,7 +5,7 @@
 Trong CP3:
 
 - Model AI chạy thật.
-- LangGraph chạy thật.
+- LangGraph, System Prompt và Function Calling chạy thật.
 - Agent thực sự tạo filter và gọi tool.
 - Tool `search_events` chạy thật.
 - Nguồn của tool là file mock `events.json`.

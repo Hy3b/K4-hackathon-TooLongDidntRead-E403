@@ -15,7 +15,7 @@ Bộ tài liệu này chỉ phục vụ mục tiêu checkpoint 3: biến UI mock
 
 1. [00-cp3-scope.md](00-cp3-scope.md) — phạm vi và tiêu chí hoàn thành CP3.
 2. [01-features-and-flows.md](01-features-and-flows.md) — tính năng nào chạy thật và flow demo.
-3. [02-ai-agent-langgraph.md](02-ai-agent-langgraph.md) — Agent, graph, tool và prompt contract.
+3. [02-ai-agent-langgraph.md](02-ai-agent-langgraph.md) — LangGraph, System Prompt, Function Calling và prompt contract.
 4. [03-backend-api.md](03-backend-api.md) — backend tối thiểu và API kết nối UI.
 5. [04-data-and-golden-set.md](04-data-and-golden-set.md) — dữ liệu sự kiện giả và bộ đánh giá ≥20 case.
 6. [05-build-plan.md](05-build-plan.md) — kế hoạch code theo thứ tự ưu tiên.
@@ -27,7 +27,7 @@ Bộ tài liệu này chỉ phục vụ mục tiêu checkpoint 3: biến UI mock
 
 - Frontend: giữ Next.js/Vinext hiện tại.
 - Backend: FastAPI.
-- AI orchestration: LangGraph.
+- AI orchestration: LangGraph chia workflow; System Prompt và Function Calling xử lý quyết định AI có cấu trúc.
 - Model: một model có structured output/tool calling.
 - Dữ liệu: file JSON sự kiện giả tự sinh, chưa cần PostgreSQL.
 - Eval: JSONL hoặc CSV với script chạy tự động.

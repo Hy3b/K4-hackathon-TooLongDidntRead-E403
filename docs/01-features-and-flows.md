@@ -111,7 +111,7 @@ Agent cần dùng context tối thiểu của lượt trước:
 - Chạy lại tool.
 - Trả kết quả mới.
 
-CP3 có thể lưu state trong memory của LangGraph theo `conversation_id`.
+CP3 lưu lịch sử hội thoại và filter gần nhất trong LangGraph state theo `conversation_id`.
 
 ## 7. Flow ngoài phạm vi
 

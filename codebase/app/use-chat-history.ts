@@ -15,18 +15,6 @@ export type ChatEvent = {
   source_url?: string;
 };
 
-export type ChatActivity = {
-  id: string;
-  type: "activity" | "tool_call";
-  title?: string;
-  details?: string;
-  name?: string;
-  input?: any;
-  output?: any;
-  duration?: number;
-  status: "pending" | "success" | "error";
-};
-
 export type ChatMessage = {
   id: string;
   role: "user" | "assistant";
@@ -35,7 +23,6 @@ export type ChatMessage = {
   events: ChatEvent[];
   warnings: string[];
   error?: boolean;
-  activities: ChatActivity[];
 };
 
 export type ChatConversation = {
@@ -51,9 +38,6 @@ type ChatApiResponse = {
   clarifyingQuestion: string;
   events: ChatEvent[];
   warnings: string[];
-  intent?: string;
-  filters?: Record<string, any>;
-  toolCalled?: boolean;
 };
 
 const STORAGE_KEY = "vlearn-event-ai:conversations:v2";
@@ -102,9 +86,6 @@ function parseChatResponse(value: unknown): ChatApiResponse {
     clarifyingQuestion: cleanMarkdown(response.clarifying_question ?? ""),
     events,
     warnings,
-    intent: response.intent as string | undefined,
-    filters: response.filters as Record<string, any> | undefined,
-    toolCalled: response.tool_called as boolean | undefined,
   };
 }
 
@@ -303,7 +284,6 @@ export function useChatHistory() {
       createdAt: now,
       events: [],
       warnings: [],
-      activities: [],
     };
     const assistantId = crypto.randomUUID();
     const assistantMessage: ChatMessage = {
@@ -313,7 +293,6 @@ export function useChatHistory() {
       createdAt: now + 1,
       events: [],
       warnings: [],
-      activities: [],
     };
 
     updateConversation(conversationId, (conversation) => ({
@@ -329,8 +308,7 @@ export function useChatHistory() {
     setStreamStatus("Đang kết nối với trợ lý…");
 
     try {
-      const baseUrl =
-        process.env.NEXT_PUBLIC_API_BASE_URL || "";
+      const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "";
       const response = await fetch(`${baseUrl}/api/chat/stream`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -358,10 +336,10 @@ export function useChatHistory() {
         for (const line of lines) {
           if (!line.trim()) continue;
           const event = JSON.parse(line) as {
-            type: "status" | "delta" | "done" | "activity" | "tool_call";
+            type: "status" | "delta" | "done";
             label?: string;
             text?: string;
-            data?: any;
+            data?: unknown;
           };
           if (requestId !== latestRequest.current) return;
 
@@ -375,20 +353,7 @@ export function useChatHistory() {
               ...conversation,
               updatedAt: Date.now(),
               messages: conversation.messages.map((message) =>
-                message.id === assistantId
-                  ? { ...message, content }
-                  : message,
-              ),
-            }));
-          }
-          if ((event.type === "activity" || event.type === "tool_call") && event.data) {
-            updateConversation(conversationId, (conversation) => ({
-              ...conversation,
-              updatedAt: Date.now(),
-              messages: conversation.messages.map((message) =>
-                message.id === assistantId
-                  ? { ...message, activities: [...message.activities, event.data as ChatActivity] }
-                  : message,
+                message.id === assistantId ? { ...message, content } : message,
               ),
             }));
           }

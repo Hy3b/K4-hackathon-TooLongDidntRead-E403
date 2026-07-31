@@ -10,7 +10,7 @@
 
 1. Người dùng nhập câu hỏi trên trang Trợ lý sự kiện.
 2. Frontend gọi `POST /api/chat`.
-3. Backend gọi model thật qua LangGraph.
+3. Backend chạy LangGraph; từng node gọi model với System Prompt và chỉ node tìm kiếm được bind schema `search_events`.
 4. Agent nhận diện intent và trích xuất filter.
 5. Agent gọi tool `search_events`.
 6. Tool đọc dữ liệu sự kiện giả từ JSON và trả kết quả có cấu trúc.

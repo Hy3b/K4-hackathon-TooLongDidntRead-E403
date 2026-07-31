@@ -75,6 +75,10 @@ test("implements streamed chat, multi-conversation history, and safe persistence
   assert.match(page, /mobile-history-bar/);
   assert.match(page, /message\.events\.map/);
   assert.match(page, /stream-caret/);
+  assert.match(page, /process-details/);
+  assert.match(page, /<details className="process-details">/);
+  assert.doesNotMatch(page, /<details className="process-details" open>/);
+  assert.match(page, /Chi tiết xử lý/);
   assert.match(page, /Đã tạo lời nhắc \(Mock\)/);
 
   assert.match(historyRoute, /globalThis\.__VLEARN_ENV__\?\.DB/);

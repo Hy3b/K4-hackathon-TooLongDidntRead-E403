@@ -1,24 +1,11 @@
 import json
-import os
 from datetime import datetime, timedelta, timezone
 from typing import List, Dict, Any, Optional
-from app.config import get_settings
+from app.database import get_db
 
-class JsonEventRepository:
+class SqliteEventRepository:
     def __init__(self):
-        self.settings = get_settings()
-        self.events = self._load_events()
-
-    def _load_events(self) -> List[Dict[str, Any]]:
-        path = self.settings.event_data_path
-        if not os.path.exists(path):
-            raise FileNotFoundError(f"Event dataset not found: {path}")
-
-        with open(path, 'r', encoding='utf-8') as f:
-            data = json.load(f)
-        if not isinstance(data, dict) or not isinstance(data.get("items"), list):
-            raise ValueError("Event dataset must contain an 'items' list")
-        return data["items"]
+        pass
 
     @staticmethod
     def _parse_datetime(value: str) -> datetime:
@@ -26,59 +13,79 @@ class JsonEventRepository:
         if parsed.tzinfo is None:
             parsed = parsed.replace(tzinfo=timezone(timedelta(hours=7)))
         return parsed.astimezone(timezone.utc)
+        
+    def _row_to_dict(self, row) -> Dict[str, Any]:
+        d = dict(row)
+        d["is_mock"] = bool(d["is_mock"])
+        d["topics"] = json.loads(d["topics"]) if d.get("topics") else []
+        d["conflicts"] = json.loads(d["conflicts"]) if d.get("conflicts") else []
+        return d
 
     def get_by_id(self, event_id: str) -> Optional[Dict[str, Any]]:
-        for event in self.events:
-            if event.get("id") == event_id:
-                return event
+        with get_db() as conn:
+            cursor = conn.cursor()
+            cursor.execute("SELECT * FROM events WHERE id = ?", (event_id,))
+            row = cursor.fetchone()
+            if row:
+                return self._row_to_dict(row)
         return None
 
     def search(self, filters: Dict[str, Any]) -> List[Dict[str, Any]]:
+        query = "SELECT * FROM events WHERE 1=1"
+        params = []
+        
+        if not filters.get("include_cancelled", False):
+            query += " AND status != 'cancelled'"
+            
+        if filters.get("event_type"):
+            query += " AND event_type = ?"
+            params.append(filters["event_type"])
+            
+        if filters.get("cost") and filters["cost"] != "any":
+            query += " AND cost = ?"
+            params.append(filters["cost"])
+            
+        if filters.get("format") and filters["format"] != "any":
+            query += " AND format = ?"
+            params.append(filters["format"])
+            
+        if filters.get("organizer"):
+            query += " AND organizer = ?"
+            params.append(filters["organizer"])
+            
+        if filters.get("location"):
+            query += " AND LOWER(location) LIKE ?"
+            params.append(f"%{filters['location'].lower()}%")
+            
+        # Time filters: we can use simple string comparison for ISO8601
+        if filters.get("date_from"):
+            query += " AND starts_at >= ?"
+            params.append(filters["date_from"])
+            
+        if filters.get("date_to"):
+            query += " AND starts_at <= ?"
+            params.append(filters["date_to"])
+
         results = []
-        for event in self.events:
-            if event.get("status") == "cancelled" and not filters.get("include_cancelled", False):
-                continue
-
-            # Apply filters
-            if "event_type" in filters and filters["event_type"]:
-                if event.get("event_type") != filters["event_type"]:
-                    continue
+        with get_db() as conn:
+            cursor = conn.cursor()
+            cursor.execute(query, params)
+            rows = cursor.fetchall()
             
-            if "cost" in filters and filters["cost"] and filters["cost"] != "any":
-                if event.get("cost") != filters["cost"]:
-                    continue
-            
-            if "format" in filters and filters["format"] and filters["format"] != "any":
-                if event.get("format") != filters["format"]:
-                    continue
-
-            if "organizer" in filters and filters["organizer"]:
-                if event.get("organizer") != filters["organizer"]:
-                    continue
-                    
-            if "location" in filters and filters["location"]:
-                # Simple substring match
-                loc = event.get("location", "").lower()
-                if filters["location"].lower() not in loc:
-                    continue
-
-            if "topics" in filters and filters["topics"]:
-                event_topics = set(event.get("topics", []))
-                filter_topics = set(filters["topics"])
-                # Require at least one matching topic (intersection)
-                if not event_topics.intersection(filter_topics):
-                    continue
-            
-            # Time filters (starts_at)
-            # Simplistic string comparison works for ISO-8601 if timezones are the same
-            if "date_from" in filters and filters["date_from"]:
-                if self._parse_datetime(event["starts_at"]) < self._parse_datetime(filters["date_from"]):
-                    continue
-            
-            if "date_to" in filters and filters["date_to"]:
-                if self._parse_datetime(event["starts_at"]) > self._parse_datetime(filters["date_to"]):
-                    continue
-
-            results.append(event)
-            
+            for row in rows:
+                event = self._row_to_dict(row)
+                
+                # Check topics (since they are stored as JSON strings, we need to filter them in Python or use SQLite JSON1)
+                # Filtering in Python is easier and completely fine for this scale
+                if filters.get("topics"):
+                    event_topics = set(event.get("topics", []))
+                    filter_topics = set(filters["topics"])
+                    if not event_topics.intersection(filter_topics):
+                        continue
+                
+                results.append(event)
+                
         return results
+
+# Tương thích ngược với các file import JsonEventRepository
+JsonEventRepository = SqliteEventRepository

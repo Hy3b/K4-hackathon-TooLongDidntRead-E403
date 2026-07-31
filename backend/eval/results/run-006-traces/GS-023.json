@@ -1,0 +1,24 @@
+{
+  "trace_id": "run_81f9c26001e74b34a834abf4757f4502",
+  "conversation_id": "eval_run-006_GS-023",
+  "input": "Tháng 8 có webinar online trả phí nào không?",
+  "current_date": "2026-07-30T10:00:00+07:00",
+  "intent": "error",
+  "filters": {},
+  "route": "out_of_scope",
+  "visited_nodes": [
+    "out_of_scope_response"
+  ],
+  "tool": null,
+  "tool_arguments": {},
+  "tool_result_count": 0,
+  "events": [],
+  "result_status": "success",
+  "latency_ms": 1819,
+  "model": "ag/gemini-3-flash",
+  "model_provider": "openai",
+  "prompt_version": "cp3-v1",
+  "warnings": [],
+  "answer": "Xin lỗi, hiện tại trợ lý chỉ hỗ trợ tìm kiếm sự kiện. Các chức năng khác như đăng ký sự kiện chưa được hỗ trợ.",
+  "timestamp": "2026-07-31T04:18:45.828107+00:00"
+}

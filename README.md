@@ -19,7 +19,7 @@
 | `spec.md` | AI Spec của nhóm (bản hoàn thiện CP4/CP5) |
 | `04-rubric.md` | Rubric 100 điểm (25 nộp checkpoint + 75 chấm bài) + checklist xác minh 6 mốc |
 | `spec.md` | AI Spec hoàn thiện của nhóm |
-| `backend/` | FastAPI, LangGraph Agent, event tool, golden set và các lượt eval |
+| `backend/` | FastAPI, LangGraph, System Prompt, Function Calling, event tool, golden set và các lượt eval |
 | `codebase/` | Frontend prototype |
 | `validation/` | Feedback log cho CP5 |
 | `reflection/` | Template và reflection cá nhân |

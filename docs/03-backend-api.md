@@ -5,7 +5,7 @@
 Backend CP3 chỉ cần hỗ trợ một vertical slice:
 
 ```text
-Next.js UI → FastAPI /api/chat → LangGraph → search_events tool → events.json
+Next.js UI → FastAPI /api/chat → LangGraph → Function Calling → search_events → events.json
 ```
 
 Không cần PostgreSQL ở CP3 nếu file JSON đáp ứng demo và eval. Thiết kế repository nên cho phép đổi sang database sau mà không sửa Agent.
@@ -15,6 +15,7 @@ Không cần PostgreSQL ở CP3 nếu file JSON đáp ứng demo và eval. Thi�
 - Python 3.12.
 - FastAPI.
 - LangGraph.
+- SDK model hỗ trợ structured Function Calling.
 - Pydantic.
 - SDK model được chọn.
 - Uvicorn.
@@ -109,7 +110,7 @@ Kiểm tra:
 
 - Dataset đọc được.
 - Model API key đã được cấu hình.
-- Graph compile thành công.
+- Graph compile thành công; System Prompt đọc được và tool schema đăng ký đúng node.
 
 Không trả giá trị secret.
 
@@ -205,6 +206,6 @@ Integration test:
 
 - `/health` trả 200.
 - `/api/chat` validate input.
-- Graph gọi tool trong happy path.
+- Graph đi đúng edge tìm kiếm; model phát `search_events` Function Call và backend thực thi đúng một lần.
 - Model output sai schema được xử lý.
 - Tool lỗi trả mã lỗi đúng.
