@@ -1,0 +1,23 @@
+# CP3 Event Assistant Backend Dependencies
+
+# FastAPI & ASGI Server
+fastapi>=0.109.0,<1.0.0
+uvicorn[standard]>=0.27.0,<1.0.0
+
+# Data Validation & Configuration
+pydantic>=2.5.3,<3.0.0
+pydantic-settings>=2.1.0,<3.0.0
+
+# LLM Framework & Integrations
+langgraph>=0.0.26
+langchain>=0.1.5
+langchain-openai>=0.0.5
+langchain-google-genai>=0.0.9
+langchain-anthropic>=0.1.1
+
+# Utilities
+python-dotenv>=1.0.1
+
+# Testing & Evaluation Dependencies
+pytest>=8.0.0
+httpx>=0.26.0

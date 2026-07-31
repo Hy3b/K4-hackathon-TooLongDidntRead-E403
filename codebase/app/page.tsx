@@ -201,10 +201,6 @@ export default function Home() {
           </div>
           <small className="history-storage">Được lưu tự động</small>
         </section>
-        <div className="profile-card">
-          <div className="avatar">HQ</div>
-          <div><strong>Huy Quốc</strong><span>Sinh viên năm nhất</span></div>
-        </div>
       </aside>
 
       <section className="workspace">
@@ -283,7 +279,7 @@ export default function Home() {
                         <div className="message user-message">
                           {message.content}
                         </div>
-                        <div className="user-avatar">HQ</div>
+                        <div className="user-avatar">U</div>
                       </div>
                     );
                   }

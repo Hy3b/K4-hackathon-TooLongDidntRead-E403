@@ -75,6 +75,8 @@ def understand_query_node(state: AgentState):
         state["missing_fields"] = result.missing_fields
         state["confidence"] = result.confidence
     except Exception as e:
+        import traceback
+        traceback.print_exc()
         # Fallback or error handling
         state["intent"] = "error"
         state["confidence"] = "low"

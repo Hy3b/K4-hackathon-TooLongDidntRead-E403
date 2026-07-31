@@ -1,0 +1,2 @@
+# Requirements for K4-hackathon-TooLongDidntRead-E403 Python Backend
+-r backend/requirements.txt
