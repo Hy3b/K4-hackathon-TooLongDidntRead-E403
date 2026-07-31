@@ -167,6 +167,16 @@ export default function Home() {
   const [notices, setNotices] = useState<NoticeItem[]>(initialNotices);
 
   useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && detail) {
+        setDetail(null);
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [detail]);
+
+  useEffect(() => {
     const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "";
     fetch(`${baseUrl}/api/events`)
       .then((res) => res.json())
@@ -263,16 +273,32 @@ export default function Home() {
         <section className="history-panel" aria-label="Lịch sử trò chuyện">
           <div className="history-heading">
             <span>ĐOẠN CHAT</span>
-            <button
-              type="button"
-              aria-label="Tạo cuộc trò chuyện mới"
-              onClick={() => {
-                newConversation();
-                navigate("Trợ lý sự kiện");
-              }}
-            >
-              +
-            </button>
+            <div style={{ display: "flex", gap: "5px" }}>
+              <button
+                type="button"
+                title="Xóa tất cả lịch sử chat"
+                aria-label="Xóa tất cả lịch sử chat"
+                onClick={() => {
+                  if (window.confirm("Bạn có chắc chắn muốn xóa toàn bộ lịch sử trò chuyện để chuẩn bị demo?")) {
+                    window.localStorage.clear();
+                    window.location.reload();
+                  }
+                }}
+              >
+                🗑
+              </button>
+              <button
+                type="button"
+                title="Tạo cuộc trò chuyện mới"
+                aria-label="Tạo cuộc trò chuyện mới"
+                onClick={() => {
+                  newConversation();
+                  navigate("Trợ lý sự kiện");
+                }}
+              >
+                +
+              </button>
+            </div>
           </div>
           <div className="history-list">
             {!historyReady && <p className="history-empty">Đang tải lịch sử…</p>}

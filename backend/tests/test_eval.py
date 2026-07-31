@@ -137,3 +137,15 @@ def test_stream_display_text_uses_a_short_summary_for_event_cards():
 
     assert display_text.startswith("Mình tìm thấy 1 sự kiện phù hợp")
     assert "**" not in display_text
+
+
+def test_normalize_filters_parses_weekend_keywords():
+    filters = normalize_filters(
+        {},
+        "các sự kiện nào cuối tuần này không ?",
+        "2026-07-31T14:00:00+07:00",  # Friday
+    )
+    assert filters.get("date_from") is not None
+    assert filters.get("date_to") is not None
+    assert "2026-08-01" in filters["date_from"]  # Saturday
+    assert "2026-08-02" in filters["date_to"]    # Sunday

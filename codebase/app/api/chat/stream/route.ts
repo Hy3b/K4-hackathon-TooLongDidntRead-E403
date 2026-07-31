@@ -43,10 +43,39 @@ function line(payload: unknown) {
   return `${JSON.stringify(payload)}\n`;
 }
 
+const BACKEND_URL = process.env.BACKEND_INTERNAL_URL || "http://127.0.0.1:8000";
+
 export async function POST(request: Request) {
-  const payload = (await request.json()) as ChatRequest;
+  const bodyText = await request.text();
+  let payload: ChatRequest = {};
+  try {
+    payload = JSON.parse(bodyText) as ChatRequest;
+  } catch {}
+
   if (!payload.message?.trim()) {
     return Response.json({ error: "message is required" }, { status: 400 });
+  }
+
+  // Attempt proxy to Python Backend first
+  try {
+    const backendRes = await fetch(`${BACKEND_URL}/api/chat/stream`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: bodyText,
+    });
+
+    if (backendRes.ok && backendRes.body) {
+      return new Response(backendRes.body, {
+        status: backendRes.status,
+        headers: {
+          "Content-Type": backendRes.headers.get("Content-Type") || "application/x-ndjson; charset=utf-8",
+          "Cache-Control": "no-cache, no-transform",
+          "X-Accel-Buffering": "no",
+        },
+      });
+    }
+  } catch (e) {
+    // Fallback to mock stream if Python backend is not reachable
   }
 
   const conversationId = payload.conversation_id || crypto.randomUUID();

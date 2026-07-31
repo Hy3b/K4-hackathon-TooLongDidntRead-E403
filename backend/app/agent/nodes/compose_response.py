@@ -11,7 +11,7 @@ def compose_grounded_answer(
         return "Chưa tìm thấy sự kiện phù hợp. Bạn có thể đổi thời gian, chủ đề hoặc điều kiện tìm kiếm."
 
     lines = ["Các sự kiện phù hợp:"]
-    for event in events[:3]:
+    for event in events[:5]:
         lines.append(
             "- {title} | {starts_at}–{ends_at} | {location} | "
             "hạn đăng ký: {registration_deadline} | trạng thái: {status} | {source_url}".format(

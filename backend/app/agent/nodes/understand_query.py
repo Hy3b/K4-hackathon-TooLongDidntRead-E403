@@ -10,6 +10,54 @@ from app.config import get_settings
 VIETNAM_TIMEZONE = timezone(timedelta(hours=7))
 
 
+def parse_vietnamese_time_keywords(message: str, current: datetime):
+    lowered = message.casefold()
+    has_time_kw = False
+    date_from = None
+    date_to = None
+
+    if "cuối tuần" in lowered:
+        has_time_kw = True
+        weekday = current.weekday()
+        if weekday == 6:  # Sunday
+            sat = current - timedelta(days=1)
+            sun = current
+        else:  # Mon to Sat
+            days_to_sat = 5 - weekday
+            sat = current + timedelta(days=days_to_sat)
+            sun = sat + timedelta(days=1)
+        date_from = sat.replace(hour=0, minute=0, second=0, microsecond=0).isoformat()
+        date_to = sun.replace(hour=23, minute=59, second=59, microsecond=0).isoformat()
+    elif "hôm nay" in lowered:
+        has_time_kw = True
+        date_from = current.replace(hour=0, minute=0, second=0, microsecond=0).isoformat()
+        date_to = current.replace(hour=23, minute=59, second=59, microsecond=0).isoformat()
+    elif "ngày mai" in lowered:
+        has_time_kw = True
+        tomorrow = current + timedelta(days=1)
+        date_from = tomorrow.replace(hour=0, minute=0, second=0, microsecond=0).isoformat()
+        date_to = tomorrow.replace(hour=23, minute=59, second=59, microsecond=0).isoformat()
+    elif "tuần này" in lowered:
+        has_time_kw = True
+        weekday = current.weekday()
+        mon = current - timedelta(days=weekday)
+        sun = mon + timedelta(days=6)
+        date_from = mon.replace(hour=0, minute=0, second=0, microsecond=0).isoformat()
+        date_to = sun.replace(hour=23, minute=59, second=59, microsecond=0).isoformat()
+    elif "tuần tới" in lowered or "tuần sau" in lowered:
+        has_time_kw = True
+        weekday = current.weekday()
+        next_mon = current + timedelta(days=(7 - weekday))
+        next_sun = next_mon + timedelta(days=6)
+        date_from = next_mon.replace(hour=0, minute=0, second=0, microsecond=0).isoformat()
+        date_to = next_sun.replace(hour=23, minute=59, second=59, microsecond=0).isoformat()
+    elif any(k in lowered for k in ["sắp hết hạn", "sắp tới", "sắp diễn ra"]):
+        has_time_kw = True
+        date_from = current.replace(hour=0, minute=0, second=0, microsecond=0).isoformat()
+
+    return date_from, date_to, has_time_kw
+
+
 def normalize_filters(filters: dict, message: str, current_date: str) -> dict:
     normalized = dict(filters)
     lowered_message = message.casefold()
@@ -22,8 +70,11 @@ def normalize_filters(filters: dict, message: str, current_date: str) -> dict:
         if str(normalized.get("location", "")).casefold() in {"online", "trực tuyến"}:
             normalized.pop("location", None)
 
-    if "hôm nay" in lowered_message:
-        normalized["date_from"] = current.replace(hour=0, minute=0, second=0, microsecond=0).isoformat()
+    d_from, d_to, _ = parse_vietnamese_time_keywords(message, current)
+    if d_from and not normalized.get("date_from"):
+        normalized["date_from"] = d_from
+    if d_to and not normalized.get("date_to"):
+        normalized["date_to"] = d_to
 
     date_from = normalized.get("date_from")
     if isinstance(date_from, str) and len(date_from) == 10:
@@ -78,7 +129,15 @@ def understand_query_node(state: AgentState):
             state["message"],
             state["current_date"],
         )
-        state["missing_fields"] = result.missing_fields
+        current = datetime.fromisoformat(state["current_date"])
+        if current.tzinfo is None:
+            current = current.replace(tzinfo=VIETNAM_TIMEZONE)
+        _, _, has_time_kw = parse_vietnamese_time_keywords(state["message"], current)
+        
+        missing_fields = list(result.missing_fields)
+        if has_time_kw or state["filters"].get("date_from") or state["filters"].get("date_to"):
+            missing_fields = [f for f in missing_fields if f != "date"]
+        state["missing_fields"] = missing_fields
         state["confidence"] = result.confidence
     except Exception as e:
         # Fallback or error handling

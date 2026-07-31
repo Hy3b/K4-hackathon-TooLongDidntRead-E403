@@ -26,11 +26,11 @@ def save_trace_best_effort(trace_data: dict[str, Any]) -> None:
         logger.exception("Failed to persist request trace")
 
 class HistoryMessage(BaseModel):
-    role: str
-    content: str
+    role: Optional[str] = "user"
+    content: Optional[str] = ""
 
 class ChatRequest(BaseModel):
-    conversation_id: str = Field(min_length=1, max_length=100)
+    conversation_id: Optional[str] = Field(default=None, max_length=100)
     message: str = Field(min_length=1, max_length=2000)
     current_date: Optional[datetime] = None
     history: List[HistoryMessage] = Field(default_factory=list)
@@ -63,6 +63,7 @@ def stream_display_text(response: ChatResponse) -> str:
 @router.post("/chat", response_model=ChatResponse)
 async def chat_endpoint(request: ChatRequest):
     start_time = time.time()
+    conv_id = request.conversation_id or f"conv_{uuid4().hex}"
     
     # Initialize state
     current_date = (
@@ -73,7 +74,7 @@ async def chat_endpoint(request: ChatRequest):
     trace_id = f"run_{uuid4().hex}"
     
     initial_state = {
-        "conversation_id": request.conversation_id,
+        "conversation_id": conv_id,
         "message": request.message,
         "current_date": current_date,
         "trace_id": trace_id,
@@ -108,14 +109,14 @@ async def chat_endpoint(request: ChatRequest):
         latency_ms = int((time.time() - start_time) * 1000)
         trace_data = {
             "trace_id": trace_id,
-            "conversation_id": request.conversation_id,
+            "conversation_id": conv_id,
             "input": request.message,
             "current_date": current_date,
             "intent": intent,
             "filters": filters,
             "tool": "search_events" if tool_called else None,
             "tool_result_count": len(events) if events else 0,
-            "events": events[:3],
+            "events": events[:5],
             "result_status": "success",
             "latency_ms": latency_ms,
             "model": settings.model_name,
@@ -127,13 +128,13 @@ async def chat_endpoint(request: ChatRequest):
         await run_in_threadpool(save_trace_best_effort, trace_data)
         
         return ChatResponse(
-            conversation_id=request.conversation_id,
+            conversation_id=conv_id,
             trace_id=trace_id,
             answer=answer,
             intent=intent,
             confidence=confidence,
             clarifying_question=clarifying_question,
-            events=events[:3], # return top 3
+            events=events[:5], # return top 5
             warnings=warnings,
             suggested_actions=suggested_actions,
             filters=filters,
@@ -145,7 +146,7 @@ async def chat_endpoint(request: ChatRequest):
         latency_ms = int((time.time() - start_time) * 1000)
         await run_in_threadpool(save_trace_best_effort, {
             "trace_id": trace_id,
-            "conversation_id": request.conversation_id,
+            "conversation_id": conv_id,
             "input": request.message,
             "error": str(e),
             "latency_ms": latency_ms
@@ -153,7 +154,7 @@ async def chat_endpoint(request: ChatRequest):
         
         # Return fallback response
         return ChatResponse(
-            conversation_id=request.conversation_id,
+            conversation_id=conv_id,
             trace_id=trace_id,
             answer="Hệ thống đang bận hoặc gặp lỗi. Vui lòng thử lại sau.",
             intent="error",
