@@ -129,9 +129,29 @@ export default function Home() {
     deleteConversation,
   } = useChatHistory();
 
-  const monthLabels = ["Tháng 7, 2026", "Tháng 8, 2026", "Tháng 9, 2026"];
-  const monthLabel = monthLabels[monthOffset + 1];
   const unreadCount = Math.max(0, notices.length - readNotices.length);
+
+  const now = new Date();
+  const viewDate = new Date(now.getFullYear(), now.getMonth() + monthOffset, 1);
+  const currentViewMonth = viewDate.getMonth();
+  const currentViewYear = viewDate.getFullYear();
+  const monthLabel = `Tháng ${currentViewMonth + 1}, ${currentViewYear}`;
+  
+  const daysInMonth = new Date(currentViewYear, currentViewMonth + 1, 0).getDate();
+  const daysInPrevMonth = new Date(currentViewYear, currentViewMonth, 0).getDate();
+  const firstDayOfWeek = new Date(currentViewYear, currentViewMonth, 1).getDay();
+  const startOffset = firstDayOfWeek === 0 ? 6 : firstDayOfWeek - 1;
+  const totalCells = Math.ceil((daysInMonth + startOffset) / 7) * 7;
+  
+  const viewEvents = myEvents.filter((e) => {
+    const parts = e.date.split("/");
+    if (parts.length === 3) {
+      const m = parseInt(parts[1], 10) - 1;
+      const y = parseInt(parts[2], 10);
+      return m === currentViewMonth && y === currentViewYear;
+    }
+    return false;
+  });
 
   function notify(text: string) {
     setToast(text);
@@ -620,8 +640,8 @@ export default function Home() {
                 <div>
                   <h2>{monthLabel}</h2>
                   <p>
-                    {monthOffset === 0
-                      ? `${myEvents.length} sự kiện trong tháng`
+                    {viewEvents.length > 0
+                      ? `${viewEvents.length} sự kiện trong tháng`
                       : "Chưa có sự kiện"}
                   </p>
                 </div>
@@ -649,20 +669,26 @@ export default function Home() {
                 ))}
               </div>
               <div className="calendar-grid calendar-days">
-                {Array.from({ length: 35 }, (_, index) => {
-                  const day = index - 4;
-                  const event =
-                    monthOffset === 0
-                      ? myEvents.find((item) => item.day === day)
-                      : undefined;
+                {Array.from({ length: totalCells }, (_, index) => {
+                  const day = index - startOffset + 1;
+                  
+                  let displayDay = day;
+                  if (day < 1) {
+                    displayDay = daysInPrevMonth + day;
+                  } else if (day > daysInMonth) {
+                    displayDay = day - daysInMonth;
+                  }
+                  
+                  const event = day >= 1 && day <= daysInMonth ? viewEvents.find((item) => item.day === day) : undefined;
+                  const isToday = day === now.getDate() && currentViewMonth === now.getMonth() && currentViewYear === now.getFullYear();
                   return (
                     <button
                       key={index}
-                      className={`${day === 7 && monthOffset === 0 ? "today" : ""} ${event ? "has-event" : ""}`}
-                      disabled={day < 1 || day > 31}
-                      onClick={() => event && setDetail(event)}
+                      className={`${isToday ? "today" : ""} ${event ? "has-event" : ""}`}
+                      disabled={day < 1 || day > daysInMonth}
+                      onClick={() => day >= 1 && day <= daysInMonth && event && setDetail(event)}
                     >
-                      <span>{day > 0 && day <= 31 ? day : ""}</span>
+                      <span>{displayDay}</span>
                       {event && (
                         <i
                           className={`event-dot dot-${event.category.toLowerCase().replace("ỹ", "y").replace("ệ", "e")}`}
@@ -682,7 +708,7 @@ export default function Home() {
                 </div>
               </div>
               <div className="agenda-list">
-                {(monthOffset === 0 ? myEvents : []).map((event) => (
+                {viewEvents.map((event) => (
                   <button
                     className="agenda-item"
                     key={event.title}
@@ -690,7 +716,7 @@ export default function Home() {
                   >
                     <span className="agenda-date">
                       <b>{event.day.toString().padStart(2, "0")}</b>
-                      <small>THÁNG 8</small>
+                      <small>{monthLabel.split(",")[0].toUpperCase()}</small>
                     </span>
                     <span className="agenda-copy">
                       <small>
@@ -702,7 +728,7 @@ export default function Home() {
                     <span className="notice-arrow">›</span>
                   </button>
                 ))}
-                {monthOffset !== 0 && (
+                {viewEvents.length === 0 && (
                   <div className="empty-state">
                     <span>▦</span>
                     <strong>Chưa có sự kiện</strong>

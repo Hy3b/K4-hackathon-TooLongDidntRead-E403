@@ -27,6 +27,22 @@ def create_reminder(req: ReminderRequest):
             INSERT INTO reminders (event_id, event_title, created_at, notified)
             VALUES (?, ?, ?, 0)
         ''', (req.event_id, req.event_title, datetime.now(timezone.utc).isoformat()))
+        
+        # Thêm thông báo ngay lập tức vào tab Thông báo
+        cursor.execute('''
+            INSERT INTO notifications (id, icon, tone, title, text, time, category, is_read, created_at)
+            VALUES (?, ?, ?, ?, ?, ?, ?, 0, ?)
+        ''', (
+            str(uuid.uuid4()),
+            "✅",
+            "success",
+            "Đã thêm vào lịch",
+            f"Bạn đã tạo lời nhắc cho sự kiện: {req.event_title}. Hệ thống sẽ báo lại trước 24 giờ.",
+            "Vừa xong",
+            "Nhắc lịch",
+            datetime.now(timezone.utc).isoformat()
+        ))
+        
         conn.commit()
         
     return {"status": "ok"}
