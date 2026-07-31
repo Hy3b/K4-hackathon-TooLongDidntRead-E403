@@ -3,7 +3,10 @@
 **SPEC → Prototype → Demo.** Đây không phải cuộc thi code — đây là cuộc thi **tư duy sản phẩm AI**.
 
 - Thời lượng: **1,5 ngày** (một ngày build + một buổi demo)
-- Nhóm: **4-5 người** · zone tối đa 5 nhóm · thi theo lớp
+- **Thành viên nhóm TooLongDidntRead**:
+  1. Nguyễn Quang Hướng - `2A202601858` (`nguyenquanghuongt67-ai`)
+  2. Võ Quốc Huy - `2A202601188` (`Huy0123`)
+  3. Nguyễn Minh Dương - `2A202601206` (`Monmon39`)
 
 ## Bắt đầu từ đâu?
 

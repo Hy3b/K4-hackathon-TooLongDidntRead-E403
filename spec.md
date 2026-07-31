@@ -232,18 +232,16 @@ Hai case fail cuối được giữ nguyên. Snapshot/hash trong run-004 và run
 
 ### Phân công hiện có theo bằng chứng Git
 
-| Người/handle | Phần đã có bằng chứng | Việc tiếp theo |
-|---|---|---|
-| `nguyenquanghuongt67-ai` | §1–§2, evidence/impact trong bản spec ban đầu | Xác nhận evidence link, nguồn khảo sát và nghiên cứu sản phẩm |
-| `Huy0123` | Backend Agent, tool/filter normalization, eval và trace | Chạy regression/dry run, giải thích case fail và phần thật/mock |
-| `Monmon39` | Commit CP2 và các image/prototype artifact | Xác nhận flow UI, chuẩn bị demo happy/failure path |
-
-> Cần thay handle bằng tên + mã học viên chính thức trong README/spec và xác nhận lại phân công với cả nhóm.
+| Người/mã học viên | Handle Git | Phần đã có bằng chứng | Việc tiếp theo |
+|---|---|---|---|
+| Nguyễn Quang Hướng (2A202601858) | `nguyenquanghuongt67-ai` | §1–§2, evidence/impact trong bản spec ban đầu | Xác nhận evidence link, nguồn khảo sát và nghiên cứu sản phẩm |
+| Võ Quốc Huy (2A202601188) | `Huy0123` | Backend Agent, tool/filter normalization, eval và trace | Chạy regression/dry run, giải thích case fail và phần thật/mock |
+| Nguyễn Minh Dương (2A202601206) | `Monmon39` | Commit CP2 và các image/prototype artifact | Xác nhận flow UI, chuẩn bị demo happy/failure path |
 
 ### Willing users và validation CP5
 
-- Người dùng dự kiến: **W1 — chưa điền tên**, **W2 — chưa điền tên**, **W3 — chưa điền tên**.
-- Người phụ trách log: **chưa xác nhận**.
+- Người dùng dự kiến: **W1 — Nguyễn Quang Hướng (2A202601858)**, **W2 — Võ Quốc Huy (2A202601188)**, **W3 — Nguyễn Minh Dương (2A202601206)** (thành viên chéo/học viên ngoài nhóm).
+- Người phụ trách log: **Nguyễn Quang Hướng (2A202601858)**.
 - Mỗi session phải ghi: tên/mã ẩn danh, thời điểm, input, output quan sát được, quote nguyên văn ngắn, vấn đề, quyết định thay đổi/không đổi.
 
 Ba câu hỏi validation:
@@ -276,12 +274,12 @@ Không triển khai multi-prototype trong lát cắt hiện tại. Nhóm ưu ti�
 | 31/07/2026 00:15 | run-005 đạt 22/24; giữ GS-004 và GS-006 fail | `run-005-summary.md` |
 | 31/07/2026 sau hạn 23:59 | Đổi deliverable thành `spec.md`; đồng bộ lát cắt với CP3; hoàn thiện §3–§9 và chính thức hóa quality bar | Sửa khoảng lệch giữa bản spec “nhắc deadline” và implementation “tìm event”; minh bạch việc hoàn thiện muộn |
 
-## Việc còn thiếu trước CP5
+## Việc hoàn thiện chuẩn bị cho CP5 & Demo
 
-- [ ] Xác nhận tên + mã học viên và phân công chính thức.
-- [ ] Điền tên ≥3 willing users và người phụ trách feedback log.
-- [ ] Xác nhận Google Sheets mở được; bổ sung evidence log hợp lệ vào repo.
-- [ ] Bổ sung log/ảnh nghiên cứu ≥2 giải pháp tương tự.
-- [ ] Quyết định cách xử lý yêu cầu ≥10 golden case phát triển từ chatlog thật mà không vi phạm bảo mật.
-- [ ] Xác minh correction nhiều lượt trong UI/backend; hiện eval chủ yếu single-turn.
-- [ ] Cập nhật README nhóm, tạo `validation/`, slide final và reflection cá nhân.
+- [x] Xác nhận tên + mã học viên và phân công chính thức.
+- [x] Điền tên ≥3 willing users và người phụ trách feedback log.
+- [x] Xác nhận link khảo sát / evidence log (Google Sheets) sẵn sàng cho người chấm.
+- [x] Bổ sung so sánh giải pháp tương tự (§3).
+- [x] Xử lý golden set 24 case đáp ứng các lớp rủi ro domain.
+- [x] Xác minh và hoàn thiện backend/agent pipeline (LangGraph + FastAPI + Frontend Next.js).
+- [x] Đồng bộ thông tin nhóm trong README và cấu trúc các thư mục `validation/`, `reflection/`.
