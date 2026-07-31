@@ -17,6 +17,7 @@ node_modules/
 .npm
 dist/
 build/
+!codebase/build/
 .next/
 out/
 coverage/
@@ -72,4 +73,7 @@ backend/eval/results/traces/*.json
 
 # Git backup folders
 .git_backup/
+
+!codebase/build/
+
 
