@@ -12,3 +12,11 @@ test('information-neutral case must tie',()=>{const t=trial(makeWorld('machine',
 test('manual may beat delayed feed',()=>{const t=trial(makeWorld('machine',{manualLookup:0,feedLag:40,due:[115,145]}));assert.ok(t.manual.loss<=t.integrated.loss)});
 test('same information time should tie',()=>{const t=trial(makeWorld('machine',{manualLookup:7,feedLag:7}));assert.equal(t.manual.loss,t.integrated.loss)});
 test('oracle score cannot be worse than any feasible immediate action',()=>{for(const k of ['machine','material','quality']){const w=makeWorld(k);for(const a of TYPES[k].actions){const r=evaluate(w,a,0);if(r.feasible)assert.ok(oracle(w).loss<=r.loss)}}});
+
+
+test('stock delay changes the actual material-ready gate',()=>{const a=evaluate(makeWorld('material',{stock:60,refillAt:95}),'none');const b=evaluate(makeWorld('material',{stock:60,refillAt:30}),'none');assert.ok(a.rows[0].eta>b.rows[0].eta)});
+test('valid QA reinspection never releases before the authorized alternate gate',()=>{const w=makeWorld('quality');const x=evaluate(w,'reinspect',10);assert.ok(x.rows[0].qaStart>=Math.min(w.qaHoldUntil,10+w.qaReinspectDuration))});
+test('order timestamps are monotone across all stages',()=>{for(const k of ['machine','material','quality'])for(const r of evaluate(makeWorld(k)).rows)assert.ok(r.cutStart<=r.cutEnd&&r.cutEnd<=r.assemblyEnd&&r.assemblyEnd<=r.qaStart&&r.qaStart<=r.qaEnd&&r.qaEnd<=r.eta)});
+test('intervention selection is recomputed and never a fixed discount',()=>{const w=makeWorld('machine');const a=evaluate(w,'repair',10),b=evaluate(w,'reroute',10);assert.notDeepEqual(a.rows,b.rows)});
+test('unapproved substitution cannot be used',()=>{assert.equal(eligible(makeWorld('material',{substituteApproved:false}),'substitute').ok,false)});
+test('all chosen interventions must be feasible',()=>{for(const k of ['machine','material','quality']){const w=makeWorld(k);const d=decide(w);assert.equal(evaluate(w,d.chosen,d.decisionAt).feasible,true)}});
