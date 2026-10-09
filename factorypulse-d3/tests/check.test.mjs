@@ -1,0 +1,14 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {makeWorld,evaluate,eligible,decide,trial,oracle,TYPES} from '../src/logic.mjs';
+test('three incidents have order-level ETA',()=>{for(const kind of ['machine','material','quality'])assert.equal(evaluate(makeWorld(kind)).rows.length,2)});
+test('lateness only at shipment gate',()=>{const o=evaluate(makeWorld('machine'));assert.ok(Math.abs(o.lateMinutes-o.rows.reduce((n,x)=>n+Math.max(0,x.eta-x.due),0))<1e-5)});
+test('unapproved backup is disallowed',()=>{const w=makeWorld('machine',{backupApproved:false});assert.equal(eligible(w,'reroute').ok,false)});
+test('insufficient capacity is disallowed',()=>{assert.equal(eligible(makeWorld('machine',{backupCapacity:100}),'reroute').ok,false)});
+test('QA unapproved fast clearance is disallowed',()=>{assert.equal(eligible(makeWorld('quality',{qaExpediteApproved:false}),'reinspect').ok,false)});
+test('stale feed requests verification',()=>{const x=decide(makeWorld('material',{dataFresh:false}));assert.equal(x.status,'VERIFY');assert.equal(x.chosen,'none')});
+test('delay past decision cutoff escalates',()=>{assert.equal(decide(makeWorld('machine',{feedLag:75})).status,'ESCALATE')});
+test('information-neutral case must tie',()=>{const t=trial(makeWorld('machine',{due:[400,410]}));assert.equal(t.manual.loss,t.integrated.loss)});
+test('manual may beat delayed feed',()=>{const t=trial(makeWorld('machine',{manualLookup:0,feedLag:40,due:[115,145]}));assert.ok(t.manual.loss<=t.integrated.loss)});
+test('same information time should tie',()=>{const t=trial(makeWorld('machine',{manualLookup:7,feedLag:7}));assert.equal(t.manual.loss,t.integrated.loss)});
+test('oracle score cannot be worse than any feasible immediate action',()=>{for(const k of ['machine','material','quality']){const w=makeWorld(k);for(const a of TYPES[k].actions){const r=evaluate(w,a,0);if(r.feasible)assert.ok(oracle(w).loss<=r.loss)}}});
