@@ -1,0 +1,173 @@
+<!doctype html><html lang="vi"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><title>FactoryPulse D3 — Decision Evidence Lab</title><style>:root{font-family:Inter,Arial,system-ui,sans-serif;color:#e4f3ff;background:#07111f;font-size:14px;font-synthesis:none}*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 54% -20%,#16434d,#07111f 55%)}.page{max-width:1620px;padding:24px 28px;margin:auto}header{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #2b394c;padding-bottom:21px;margin-bottom:20px;gap:14px}.identity{display:flex;align-items:center;gap:20px}.logo{font-size:24px;background:#1c3448;border:1px solid #3ac5b5;color:#d9f7f2;padding:13px;border-radius:15px;font-weight:900;letter-spacing:-4px}.logo span{color:#5ce1c0}.overline,.eyebrow{font-size:10px;color:#6ce2cc;letter-spacing:1.25px;font-weight:900}.overline i{color:#5c8390}h1{margin:7px 0 0;font-size:34px;letter-spacing:-1.7px;line-height:1.05}h1 span{color:#57dfbd}header p{margin:5px 0 0;color:#91a9bd;font-size:12px}.disclosure{border:1px solid #987342;background:#3b2a1b;color:#ffcd88;text-align:center;padding:13px 15px;border-radius:10px;font-size:11px;font-weight:900;line-height:1.7}.disclosure small{font-size:9px;color:#e7af87}.columns{display:grid;grid-template-columns:minmax(240px,.94fr) minmax(600px,2.55fr) minmax(270px,1.05fr);gap:15px}.panel,.metric{background:linear-gradient(145deg,#142437,#0d1b2c);border:1px solid #2a4056;border-radius:13px;padding:20px;box-shadow:0 13px 35px #0002}.panel{margin-bottom:15px}.left,.right{margin:0}.panel h2{margin:9px 0 22px;font-size:19px;letter-spacing:-.5px}.panel-top{display:flex;justify-content:space-between;align-items:center;gap:12px}.panel-top h2{margin:9px 0 0}.tag{font-size:9px;letter-spacing:.65px;color:#93d2c7;border:1px solid #31645c;padding:9px;border-radius:50px;white-space:nowrap;font-weight:900}button,select{font:inherit}button{cursor:pointer}#scenarioList button{width:100%;text-align:left;color:#e3eefa;background:#17283b;border:1px solid #395064;padding:13px 12px;margin:7px 0;border-radius:9px;display:block}#scenarioList button.selected{background:#193d42;border-color:#56d0be;box-shadow:inset 3px 0 #56d0be}#scenarioList button b{display:block;font-size:12px}#scenarioList button small{color:#a4b4c7;font-size:10px}.rule{height:1px;background:#2a3f50;margin:22px 0}label{display:block;font-size:11px;font-weight:800;color:#b7cbdb;margin:15px 0 9px}label span{float:right;color:#5ae3c4}select{width:100%;background:#182b3e;color:#e0f1ff;border:1px solid #3b526a;border-radius:8px;padding:12px;font-size:11px}input[type=range]{width:100%;accent-color:#52c7aa}.hint{font-size:11px;color:#8da4bc;line-height:1.65}.hint b{color:#c5eae3}.flow{display:flex;align-items:center;gap:8px;margin:28px 0 20px}.flowbox{flex:1;border:1px solid #3d5f6c;background:#152d40;padding:15px 8px;border-radius:9px;text-align:center;min-width:0}.flowbox small{display:block;font-size:9px;letter-spacing:.45px;color:#4dd4c2;font-weight:900}.flowbox b{display:block;font-size:11px;line-height:1.4;margin:10px 0}.flowbox em{font-size:9px;display:block;color:#92a8bc;font-style:normal}.flow>span{color:#58d7ca;font-size:20px}.event{background:#312638;border:1px solid #835667;border-radius:9px;padding:14px;display:flex;align-items:center;gap:11px}.event b{display:block;font-size:12px}.event small{color:#ddb3b9;font-size:10px;display:block;margin-top:7px}.pulse{width:10px;height:10px;border-radius:50%;background:#ff838f;box-shadow:0 0 0 6px #ff838f24}.metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:15px}.metric{padding:15px 14px}.metric small{font-size:9px;letter-spacing:.5px;color:#90a5b9;font-weight:800;display:block}.metric strong{font-size:28px;line-height:1.2;display:block;margin:9px 0 6px;letter-spacing:-1px}.metric span{color:#7f95a9;font-size:10px}.compare{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:20px}.decision{border:1px solid #476078;background:#15283e;padding:17px;border-radius:10px}.decision.integrated{border-color:#2b9886;background:#153439}.decision>small{color:#9ab5cf;font-size:10px;letter-spacing:.5px;font-weight:800}.decision h3{font-size:17px;margin:14px 0 9px}.decision p{font-size:11px;color:#adc4d5;line-height:1.6;min-height:35px}.decision-meta{color:#69d8c5;font-size:11px;font-weight:800}.minihead{font-size:13px;margin-top:24px;color:#d5f2ef}table{width:100%;border-collapse:collapse;font-size:11px;margin-top:13px}th{color:#91a8be;background:#182c40;text-align:left;padding:13px 11px;font-size:9px;letter-spacing:.5px}td{padding:13px 11px;border-bottom:1px solid #263a50}td:last-child{color:#65deb8;font-weight:800}.result{background:#122c35;padding:16px;border:1px solid #396374;border-radius:10px}.result span{display:block;color:#5bd7c4;font-size:10px;font-weight:900;letter-spacing:1px}.result b{font-size:14px;display:block;margin-top:9px;line-height:1.5}.big{font-size:40px;font-weight:900;letter-spacing:-1px;margin-top:16px}.big small{font-size:12px;color:#8daabd;font-weight:500;letter-spacing:0}.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:12px 0}.stats>div{background:#101d2f;border:1px solid #283f56;border-radius:7px;padding:9px 4px;text-align:center}.stats b{font-size:21px;display:block}.stats small{font-size:9px;color:#83a8ba}.handoff{padding:9px 0;border-bottom:1px solid #263a50}.handoff b{font-size:11px}.handoff small{display:block;color:#91aabe;font-size:10px;line-height:1.6;margin-top:4px}.danger{font-size:10px;color:#f3c792;background:#33291c;border:1px solid #665035;padding:11px;border-radius:8px;margin:20px 0}#download{background:#36c9b1;color:#06252b;font-weight:900;padding:13px 8px;border:0;border-radius:8px;width:100%;font-size:10px;letter-spacing:.45px}footer{font-size:9px;color:#71879e;letter-spacing:.3px;display:flex;justify-content:space-between;padding:22px 0}@media(max-width:1200px){.columns{grid-template-columns:260px 1fr}.right{grid-column:1/-1}.stats{grid-template-columns:repeat(4,1fr)}}@media(max-width:800px){.columns{display:block}.metrics{grid-template-columns:repeat(2,1fr)}.compare{grid-template-columns:1fr}header{display:block}.disclosure{display:inline-block;margin-top:12px}.flow{flex-wrap:wrap}.flowbox{min-width:40%}.flow>span{display:none}footer{display:block}}
+</style></head><body>
+<div class="page"><header><div class="identity"><div class="logo">F<span>•</span>P</div><div><div class="overline">DENSO FACTORY HACKS 2026 <i>/</i> D3 · DATA UTILIZATION</div><h1>Factory<span>Pulse.</span></h1><p>From incident to a traceable, constraint-aware decision.</p></div></div><div class="disclosure">SYNTHETIC TEST ENVIRONMENT<br><small>NO DENSO DATA · NO TRAINED AI · NO REAL ROI</small></div></header>
+<div class="columns"><aside class="panel left"><div class="eyebrow">01 / INCIDENT & WORLD</div><h2>Inject disruption</h2><div id="scenarioList"></div><div class="rule"></div><label for="fixture">Experimental condition</label><select id="fixture"><option value="normal">Reference · fresh information</option><option value="fastManual">SOP quicker than integrated feed</option><option value="stale">Stale integration · verify</option><option value="noApproval">Restricted authority/capacity</option><option value="neutral">No meaningful intervention needed</option></select><label for="manual">Manual lookup delay <span id="manualLabel"></span></label><input id="manual" type="range" min="0" max="45" value="15" step="1"/><label for="feed">Integration feed delay <span id="feedLabel"></span></label><input id="feed" type="range" min="0" max="45" value="3" step="1"/><p class="hint">The SOP can query Planning/QA/Warehouse. Both policies use the <b>same</b> action optimizer. Only when reliable information arrives differs.</p></aside>
+<main><section class="panel"><div class="panel-top"><div><div class="eyebrow">02 / FOUR CONNECTED DATA DOMAINS</div><h2>Trace a decision, not a dashboard alarm</h2></div><span class="tag">LINKED LOGIC ↔ MANUFACTURING</span></div><div class="flow"><div class="flowbox"><small>ERP · LOGIC</small><b>2 customer orders</b><em>BOM · due · priority</em></div><span>→</span><div class="flowbox"><small>WMS · MATERIALS</small><b>Part availability</b><em>stock · inbound</em></div><span>→</span><div class="flowbox"><small>MES · SHOP FLOOR</small><b>Cut → Assemble</b><em>capacity · downtime</em></div><span>→</span><div class="flowbox"><small>QA / TMS</small><b>Hold → Ship</b><em>release · ETA</em></div></div><div class="event"><span class="pulse"></span><div><b id="eventTitle"></b><small id="eventDesc"></small></div></div></section>
+<section class="metrics"><div class="metric"><small>SOP MANUAL <b>LOSS</b></small><strong id="manualLoss">—</strong><span>synthetic loss points</span></div><div class="metric"><small>INTEGRATED <b>LOSS</b></small><strong id="feedLoss">—</strong><span>synthetic loss points</span></div><div class="metric"><small>TIME TO DECISION</small><strong id="decisionDelta">—</strong><span>integrated vs manual, min</span></div><div class="metric"><small>SAFE DECISION</small><strong id="decisionState">—</strong><span>verify / act / no action</span></div></section>
+<section class="panel"><div class="panel-top"><div><div class="eyebrow">03 / HEAD-TO-HEAD</div><h2>Same factory state. Same actions. Same constraints.</h2></div><span class="tag">NO HARD-CODED IMPROVEMENT</span></div><div class="compare"><div class="decision"><small>BASELINE · MANUAL SOP LOOKUP</small><h3 id="manualAction"></h3><p id="manualWhy"></p><div class="decision-meta" id="manualStats"></div></div><div class="decision integrated"><small>CANDIDATE · CROSS-LAYER FEED</small><h3 id="integratedAction"></h3><p id="integratedWhy"></p><div class="decision-meta" id="integratedStats"></div></div></div><h3 class="minihead">Order-level production schedule</h3><table><thead><tr><th>ORDER</th><th>DEADLINE</th><th>MANUAL ETA</th><th>INTEGRATED ETA</th><th>INTEGRATED LATE</th></tr></thead><tbody id="orderTable"></tbody></table></section></main>
+<aside class="panel right"><div class="eyebrow">04 / TRUST & EVIDENCE</div><h2>Adversarial outcomes</h2><div class="result"><span id="resultClass"></span><b id="resultText"></b></div><p class="hint">Winning is not guaranteed: slower feeds, quality holds and missing approvals can erase the benefit.</p><div class="rule"></div><div class="eyebrow">REPRODUCIBLE BENCHMARK</div><div class="big">24 <small>stress cases</small></div><div class="stats"><div><b id="wins">—</b><small>Wins</small></div><div><b id="ties">—</b><small>Ties</small></div><div><b id="losses">—</b><small>Losses</small></div><div><b id="verifies">—</b><small>Verify</small></div></div><p class="hint">Hand-authored stress cases; not an external holdout or statistical generalization. Benchmark summary is audited in the repository.</p><div class="rule"></div><div class="eyebrow">DEPARTMENT HANDOFF</div><div id="handoff"></div><div class="danger">Human approval required. Never command PLCs or release held lots automatically.</div><button id="download">EXPORT CURRENT TRIAL · JSON ↓</button></aside></div>
+<footer>FACTORYPULSE / D3 · RULE-BASED DEMONSTRATION · THE TRUE FACTORY PAIN AND ROI REMAIN UNVERIFIED <span>Open-source proof for 2026 idea round</span></footer></div>
+<script>// All fixtures are SYNTHETIC. No personal, DENSO, ERP or proprietary production data.
+const BASE = Object.freeze({
+  quantities:[90,70], priorities:[2,1], due:[135,165], transit:18,
+  cutRate:3, assemblyRate:2, inspectRate:4, stock:180,
+  downtimeEnd:0, refillAt:0, qaHoldUntil:0,
+  backupRate:2, backupCapacity:200, backupApproved:true,
+  substituteApproved:true, substituteUnits:160, qaExpediteApproved:true,
+  repairDuration:30, routeSetup:12, inboundDuration:38, qaReinspectDuration:28,
+  decisionDeadline:60, // maximum time to make initial safe recommendation
+  feedLag:3, manualLookup:15, // assumed time until trustworthy cross-department information arrives
+  dataFresh:true,
+});
+const TYPES={
+  machine:{name:'Machine downtime',trigger:'MES · M-CUT-01',reason:'M-CUT-01 is unavailable; order queue is affected.',actions:['none','repair','reroute']},
+  material:{name:'Material shortage',trigger:'WMS · PART-X',reason:'PART-X cannot cover the next full lot.',actions:['none','expedite','substitute']},
+  quality:{name:'Quality hold',trigger:'QA · LOT-101',reason:'The first lot is held pending controlled inspection.',actions:['none','reinspect']},
+};
+const ACTIONS={
+  none:{name:'Wait / retain current plan',dept:'Planning',cost:0},
+  repair:{name:'Expedite maintenance',dept:'Maintenance',cost:18},
+  reroute:{name:'Route to approved backup',dept:'Production',cost:25},
+  expedite:{name:'Expedite inbound shipment',dept:'Purchasing',cost:24},
+  substitute:{name:'Use QA-approved substitute',dept:'Quality',cost:34},
+  reinspect:{name:'Approved parallel reinspection',dept:'Quality',cost:17}
+};
+function makeWorld(type,overrides={},id='illustration'){
+  if(!TYPES[type])throw new Error('Unknown incident');
+  return { ...BASE,
+    ...(type==='machine'?{downtimeEnd:75}:type==='material'?{stock:60,refillAt:95}:{qaHoldUntil:165}),
+    ...overrides,
+    type,id
+  };
+}
+const DEMOS=[
+  makeWorld('machine',{},'demo-machine'),
+  makeWorld('material',{},'demo-material'),
+  makeWorld('quality',{},'demo-quality'),
+  makeWorld('machine',{backupApproved:false,qaExpediteApproved:false},'unsafe-backup'),
+  makeWorld('material',{dataFresh:false},'stale-data'),
+  makeWorld('quality',{qaExpediteApproved:false},'qa-approval-missing')
+];
+
+
+const round=x=>Math.round(x*100)/100;
+const assert=(c,m)=>{if(!c)throw Error(m)};
+function checkInputs(w){
+  assert(TYPES[w.type], 'invalid incident');
+  for(const v of [...w.quantities,...w.due,...w.priorities,w.cutRate,w.assemblyRate,w.inspectRate,w.backupRate,w.backupCapacity,w.stock,w.transit,w.feedLag,w.manualLookup]){
+    assert(Number.isFinite(v)&&v>=0,'negative or non-finite resource/timing');
+  }
+  assert(w.quantities.length===2&&w.due.length===2&&w.priorities.length===2,'two-order demonstration');
+  assert(w.cutRate>0&&w.assemblyRate>0&&w.inspectRate>0,'throughput > 0');
+  return true;
+}
+function eligible(w,action){
+  if(!TYPES[w.type].actions.includes(action))return {ok:false,why:'action does not address this incident'};
+  if(action==='reroute' && (!w.backupApproved||w.backupCapacity < w.quantities.reduce((a,b)=>a+b,0)))return {ok:false,why:'backup route unapproved or lacks capacity'};
+  if(action==='substitute' && (!w.substituteApproved || (w.stock+w.substituteUnits)<w.quantities.reduce((a,b)=>a+b,0)))return {ok:false,why:'substitute not QA-approved or insufficient'};
+  if(action==='reinspect' && !w.qaExpediteApproved)return {ok:false,why:'QA-authorized reinspection unavailable'};
+  return {ok:true,why:'hard constraints satisfied'};
+}
+// Discrete serial-stage schedule. Lateness computed exactly once at the shipping gate.
+// For simplicity, lots are indivisible, no splitting/preemption, and a single carrier departure is omitted.
+function evaluate(w,action='none',decisionAt=0){
+  checkInputs(w);assert(ACTIONS[action],'unknown action');
+  assert(Number.isFinite(decisionAt)&&decisionAt>=0,'bad decision time');
+  const valid=eligible(w,action); if(!valid.ok)return {feasible:false,why:valid.why,action,decisionAt};
+  let cutRate=w.cutRate, ready=(w.type==='machine'?w.downtimeEnd:0), stock=w.stock;
+  let replenishAt=w.refillAt, qaHold=w.qaHoldUntil, approvedRelease=false;
+  if(w.type==='machine'){
+    if(action==='repair')ready=Math.min(ready,decisionAt+w.repairDuration);
+    if(action==='reroute'){ready=Math.min(ready,decisionAt+w.routeSetup);cutRate=w.backupRate;}
+  }
+  if(w.type==='material'){
+    if(action==='expedite')replenishAt=Math.min(replenishAt,decisionAt+w.inboundDuration);
+    if(action==='substitute')stock+=w.substituteUnits;
+  }
+  if(w.type==='quality'&&action==='reinspect'){
+    // The QA manager has authorized the alternate inspection, not an unsafe forced release.
+    qaHold=Math.min(qaHold,decisionAt+w.qaReinspectDuration);approvedRelease=true;
+  }
+  let cutFree=ready, assemblyFree=0, qualityFree=0, inboundCount=0;
+  const rows=[];
+  for(let i=0;i<w.quantities.length;i++){
+    const qty=w.quantities[i];let materialReady=0;
+    if(stock<qty){stock+=240;inboundCount++;materialReady=replenishAt;}
+    if(stock<qty)return {feasible:false,why:'not enough material',action,decisionAt};
+    stock-=qty;
+    const cutStart=Math.max(cutFree,materialReady),cutEnd=cutStart+qty/cutRate;cutFree=cutEnd;
+    const assemblyStart=Math.max(assemblyFree,cutEnd),assemblyEnd=assemblyStart+qty/w.assemblyRate;assemblyFree=assemblyEnd;
+    const qaStart=Math.max(qualityFree,assemblyEnd,i===0?qaHold:0);
+    const qaEnd=qaStart+qty/w.inspectRate;qualityFree=qaEnd;
+    const eta=qaEnd+w.transit,late=Math.max(0,eta-w.due[i]);
+    rows.push({id:`ORD-${101+i}`,qty,due:w.due[i],cutStart:round(cutStart),cutEnd:round(cutEnd),assemblyEnd:round(assemblyEnd),qaStart:round(qaStart),qaEnd:round(qaEnd),eta:round(eta),late:round(late),priority:w.priorities[i],qualityReleased:qaEnd>=qaHold});
+  }
+  const lateness=rows.reduce((s,r)=>s+r.late,0), weightedLate=rows.reduce((s,r)=>s+r.late*r.priority,0);
+  const score=weightedLate+0.65*ACTIONS[action].cost; // synthetic cost weight: for ranking only, never monetary ROI
+  return {feasible:true,action,decisionAt,rows,lateMinutes:round(lateness),weightedLate:round(weightedLate),costPoints:ACTIONS[action].cost,loss:round(score),inboundCount,approvedRelease,
+    why: action==='none'?'No intervention selected':'Action simulated under declared capacity/quality authorization'};
+}
+// Policy receives a dated snapshot, not hidden post-decision facts.
+// A stale feed cannot authorize a risky intervention; system must request verification.
+function decide(w,channel='integrated',opts={}){
+  checkInputs(w);
+  const feedLag=opts.feedLag ?? w.feedLag, manualLookup=opts.manualLookup ?? w.manualLookup;
+  const ready=channel==='integrated'?feedLag:manualLookup;
+  const fresh=channel==='integrated'?w.dataFresh:true;
+  if(!fresh)return {status:'VERIFY',why:'stale / inconsistent cross-layer input; manual confirmation required',decisionAt:ready,channel,chosen:'none',simulation:evaluate(w,'none',ready)};
+  if(ready>w.decisionDeadline)return {status:'ESCALATE',why:'decision time budget expired; request operator approval',decisionAt:ready,channel,chosen:'none',simulation:evaluate(w,'none',ready)};
+  // The SAME exhaustive loss-based policy is used for BOTH information channels.
+  const scored=TYPES[w.type].actions.map(a=>evaluate(w,a,ready)).filter(s=>s.feasible)
+    .sort((a,b)=>a.loss-b.loss || ACTIONS[a.action].cost-ACTIONS[b.action].cost);
+  const best=scored[0],noAction=scored.find(s=>s.action==='none');
+  // Threshold prevents recommendation when benefit is insignificant. Always allow the safe no-action response.
+  const chosen=(noAction.loss-best.loss>=1)?best:noAction;
+  return {status:chosen.action==='none'?'NO_ACTION':'RECOMMEND',why:chosen.action==='none'?'No safe intervention has >= 1 point improvement under these assumptions':'Lowest loss among permitted interventions',decisionAt:ready,channel,chosen:chosen.action,simulation:chosen,options:scored};
+}
+function oracle(w){
+  const options=TYPES[w.type].actions.map(a=>evaluate(w,a,0)).filter(o=>o.feasible).sort((a,b)=>a.loss-b.loss);
+  return options[0];
+}
+function trial(w,opts={}){
+  const sop=decide(w,'manual',opts), integrated=decide(w,'integrated',opts),truth=oracle(w);
+  const metric=p=>({status:p.status,action:p.chosen,decisionAt:p.decisionAt,loss:p.simulation.loss,lateMinutes:p.simulation.lateMinutes,
+    regret:round(Math.max(0,p.simulation.loss-truth.loss)),violations:p.simulation.feasible?0:1});
+  return {id:w.id,type:w.type,assumptions:{manualLookup:opts.manualLookup ?? w.manualLookup,feedLag:opts.feedLag ?? w.feedLag,feedFresh:w.dataFresh},
+    manual:metric(sop),integrated:metric(integrated),oracle:{action:truth.action,loss:truth.loss},
+    localEvent:TYPES[w.type].trigger,world:w};
+}
+
+
+
+const $=id=>document.getElementById(id),n=x=>Number(x).toFixed(1);
+let chosen='machine',fixture='normal',manualLookup=15,feedLag=3;
+const effects={normal:{},fastManual:{manualLookup:0,feedLag:9},stale:{dataFresh:false},noApproval:{backupApproved:false,substituteApproved:false,qaExpediteApproved:false,backupCapacity:0},neutral:{due:[270,305]}};
+const departments={machine:[['Maintenance','Verify outage and repair window.'],['Planning','Check impacted orders and replanning conditions.'],['Production','Authorize backup routing only if rated capacity permits.'],['Logistics','Escalate delivery risks.']],material:[['Warehouse','Confirm PART-X available balance and replenishment time.'],['Purchasing','Verify inbound shipment acceleration cost.'],['Quality','Approve any substitute part and required checks.'],['Planning','Refresh order commitment only after validation.']],quality:[['Quality','Retain hold; authorize controlled reinspection if acceptable.'],['Production','Isolate affected lot and preserve genealogy.'],['Planning','Recompute order-level ETA with the release gate.'],['Logistics','Prevent shipment until approval is documented.']]};
+function world(){return makeWorld(chosen,{...effects[fixture],manualLookup,feedLag},'interactive-'+chosen+'-'+fixture)}
+function actionName(a){return ACTIONS[a]?.name??a}
+function render(){
+ $('scenarioList').innerHTML=Object.entries(TYPES).map(([id,v])=>`<button data-type="${id}" class="${chosen===id?'selected':''}"><b>${v.name}</b><small>${v.trigger}</small></button>`).join('');
+ document.querySelectorAll('[data-type]').forEach(b=>b.onclick=()=>{chosen=b.dataset.type;render()});
+ $('manualLabel').textContent=manualLookup+' min';$('feedLabel').textContent=feedLag+' min';
+ const w=world(),t=trial(w),s=decide(w,'manual'),f=decide(w,'integrated');
+ $('eventTitle').textContent=TYPES[chosen].trigger+' · INJECTED EVENT';$('eventDesc').textContent=TYPES[chosen].reason;
+ $('manualLoss').textContent=n(t.manual.loss);$('feedLoss').textContent=n(t.integrated.loss);
+ const delta=t.manual.decisionAt-t.integrated.decisionAt;
+ $('decisionDelta').textContent=(delta>=0?'+':'')+n(delta)+'m';$('decisionState').textContent=t.integrated.status;
+ $('manualAction').textContent=actionName(t.manual.action);$('integratedAction').textContent=f.status==='VERIFY'?'Request human verification':f.status==='ESCALATE'?'Escalate to operator':actionName(t.integrated.action);
+ $('manualWhy').textContent=s.why;$('integratedWhy').textContent=f.why;
+ $('manualStats').textContent=`Decision: ${n(t.manual.decisionAt)} min · Regret: ${n(t.manual.regret)}`;
+ $('integratedStats').textContent=`Decision: ${n(t.integrated.decisionAt)} min · Regret: ${n(t.integrated.regret)}`;
+ $('orderTable').innerHTML=s.simulation.rows.map((r,i)=>{let u=f.simulation.rows[i];return `<tr><td>${r.id}</td><td>${n(r.due)}m</td><td>${n(r.eta)}m</td><td>${n(u.eta)}m</td><td>${n(u.late)}m</td></tr>`}).join('');
+ const d=t.manual.loss-t.integrated.loss;
+ const classif=f.status==='VERIFY'?'NEEDS VERIFICATION':(Math.abs(d)<0.001?'TIE':d>0?'INTEGRATION BENEFIT':'MANUAL SOP BETTER');
+ $('resultClass').textContent=classif;
+ $('resultText').textContent=f.status==='VERIFY'?'Stale information: no automatic recommendation.':(Math.abs(d)<.001?'No measured difference under this synthetic world.':d>0?`Integrated feed yields ${n(d)} fewer loss points.`:`Manual SOP yields ${n(-d)} fewer loss points.`);
+ $('handoff').innerHTML=departments[chosen].map(([a,b])=>`<div class="handoff"><b>${a}</b><small>${b}</small></div>`).join('');
+ $('download').onclick=()=>{const blob=new Blob([JSON.stringify({disclaimer:'Synthetic trial only; not validated DENSO ROI.',trial:t},null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='factorypulse-trial.json';a.click();URL.revokeObjectURL(url)};
+}
+$('fixture').onchange=e=>{fixture=e.target.value;const x=effects[fixture];manualLookup=x.manualLookup??15;feedLag=x.feedLag??3;$('manual').value=manualLookup;$('feed').value=feedLag;render()};
+$('manual').oninput=e=>{manualLookup=+e.target.value;render()};$('feed').oninput=e=>{feedLag=+e.target.value;render()};
+Promise.resolve({json:async()=>({"count": 24, "groups": [{"type": "machine", "count": 8}, {"type": "material", "count": 8}, {"type": "quality", "count": 8}], "integrationWins": 5, "ties": 14, "manualWins": 2, "verificationCases": 3, "invalidActions": 0, "notes": ["Synthetic rule-based benchmark. Neither manualLookup nor feedLag is measured at DENSO.", "Fixtures are hand-authored stress families; do NOT infer statistical generalization or ROI.", "Both policies have identical action sets, evaluation rules and oracle; latency is the manipulated assumption.", "A separate evaluator module could strengthen independence; current oracle shares declared deterministic model."]})}).then(r=>r.json()).then(x=>{for(const [id,key] of [['wins','integrationWins'],['ties','ties'],['losses','manualWins'],['verifies','verificationCases']])$(id).textContent=x[key]}).catch(()=>{for(const id of ['wins','ties','losses','verifies'])$(id).textContent='–'});
+render();window.FactoryPulse={setIncident:(x)=>{chosen=x;render()},setFixture:(x)=>{fixture=x;manualLookup=effects[x].manualLookup??15;feedLag=effects[x].feedLag??3;$('fixture').value=x;$('manual').value=manualLookup;$('feed').value=feedLag;render()},getCurrent:()=>trial(world())};
+</script></body></html>
